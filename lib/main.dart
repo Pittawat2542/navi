@@ -1,4 +1,5 @@
 import 'package:Navi/screens/ActivityListScreen.dart';
+import 'package:Navi/screens/AppSearchDelegate.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -34,6 +35,15 @@ class _MyHomePageState extends State<MyHomePage> {
         title: Text(widget.title),
       ),
       body: ActivityListScreen(),
+      floatingActionButton: FloatingActionButton(
+        onPressed: () {
+          showSearch(
+            context: context,
+            delegate: AppSearchDelegate(),
+          );
+        },
+        child: Icon(Icons.search),
+      ),
     );
   }
 }

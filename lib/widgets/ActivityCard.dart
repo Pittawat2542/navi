@@ -13,6 +13,7 @@ class ActivityCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
+        //TODO: Navigate to the ActivityDetailScreen with id passed
         print(id);
         Navigator.push(context,
             MaterialPageRoute(builder: (context) => PlaceholderScreen()));

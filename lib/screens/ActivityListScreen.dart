@@ -3,6 +3,12 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class ActivityListScreen extends StatefulWidget {
+  String query;
+
+  //TODO: Add support for category
+
+  ActivityListScreen({this.query});
+
   @override
   _ActivityListScreenState createState() => _ActivityListScreenState();
 }
@@ -10,6 +16,13 @@ class ActivityListScreen extends StatefulWidget {
 class _ActivityListScreenState extends State<ActivityListScreen> {
   @override
   Widget build(BuildContext context) {
+    if (widget.query != null && widget.query.isNotEmpty) {
+      //TODO: Implement logic to filter the result
+      print('Do something => ' + widget.query);
+    }
+
+    //TODO: Support category here
+
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: StreamBuilder<QuerySnapshot>(
@@ -24,7 +37,7 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
             default:
               return new ListView(
                 children:
-                    snapshot.data.documents.map((DocumentSnapshot document) {
+                snapshot.data.documents.map((DocumentSnapshot document) {
                   return Column(
                     children: <Widget>[
                       ActivityCard(
