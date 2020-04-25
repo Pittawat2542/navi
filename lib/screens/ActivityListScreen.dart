@@ -17,8 +17,41 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
   @override
   Widget build(BuildContext context) {
     if (widget.query != null && widget.query.isNotEmpty) {
-      //TODO: Implement logic to filter the result
-      print('Do something => ' + widget.query);
+      return Padding(
+        padding: const EdgeInsets.all(16.0),
+        child: StreamBuilder<QuerySnapshot>(
+          stream: Firestore.instance
+              .collection('activity')
+              .orderBy('title')
+              .where('title', isGreaterThanOrEqualTo: widget.query)
+              .where('title', isLessThanOrEqualTo: widget.query + '\uF7FF')
+              .snapshots(),
+          builder:
+              (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+            if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+            switch (snapshot.connectionState) {
+              case ConnectionState.waiting:
+                return new Center(
+                  child: CircularProgressIndicator(),
+                );
+              default:
+                return new ListView(
+                  children:
+                      snapshot.data.documents.map((DocumentSnapshot document) {
+                    return Column(
+                      children: <Widget>[
+                        ActivityCard(
+                            id: document.documentID,
+                            title: document["title"],
+                            imageUrl: document["imageUrl"]),
+                      ],
+                    );
+                  }).toList(),
+                );
+            }
+          },
+        ),
+      );
     }
 
     //TODO: Support category here
