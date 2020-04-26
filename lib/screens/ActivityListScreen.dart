@@ -16,6 +16,7 @@ class ActivityListScreen extends StatefulWidget {
 class _ActivityListScreenState extends State<ActivityListScreen> {
   @override
   Widget build(BuildContext context) {
+    print(widget.query.toString()+'from');
     if (widget.query != null && widget.query.isNotEmpty) {
       return Padding(
         padding: const EdgeInsets.all(16.0),
