@@ -68,6 +68,7 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
               return new ListView(
                 children:
                     snapshot.data.documents.map((DocumentSnapshot document) {
+                      print(document['id']);
                   return _buildActivityCard(document, category);
                 }).toList(),
               );

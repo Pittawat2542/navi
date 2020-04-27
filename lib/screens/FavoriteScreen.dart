@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:Navi/widgets/ActivityCard.dart';
 
 import 'package:Navi/widgets/ActivityCard.dart';
 
@@ -12,6 +13,7 @@ class FavoriteScreen extends StatefulWidget {
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
   //TODO: Add logic to load item from local storage and show all activity cards
+  final LocalStorage _storage = new LocalStorage('favorites');
 
   @override
   Widget build(BuildContext context) {
@@ -25,22 +27,126 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
 
   Padding _buildNormalActivityList() {
     return Padding(
-      padding: const EdgeInsets.all(16.0),
-      child: ListView(
-          children: [
-            Hero(
-              tag: 'Ie75XgFvInvcd63ykfeS',
-              child: ActivityCard(
-                id: 'Ie75XgFvInvcd63ykfeS',
-                title: 'SIT CRAFT Camp',
-                imageUrl: 'https://www.camphub.in.th/wp-content/uploads/2017/10/sit.png',
-                category: 'activity',
-              ),
-            ),
-          ]
-      )
-      ,
-    );
+        padding: const EdgeInsets.all(16.0),
+        child: SingleChildScrollView(
+          child: Column(
+            children: <Widget>[
+              StreamBuilder<QuerySnapshot>(
+                  stream:
+                      Firestore.instance.collection('news').snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError)
+                      return new Text('Error: ${snapshot.error}');
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return new Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      default:
+                        return new ListView(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: snapshot.data.documents
+                                .where((DocumentSnapshot doc) {
+                              return _storage.getItem(doc.documentID) != null
+                                  ? _storage.getItem(doc.documentID) == 'true'
+                                  : false;
+                            }).map((DocumentSnapshot doc) {
+                              return Hero(
+                                tag: doc.documentID.toString(),
+                                child: ActivityCard(
+                                  id: doc.documentID,
+                                  title: doc['title'],
+                                  imageUrl: doc['imageUrl'],
+                                  category: 'competition',
+                                ),
+                              );
+                            }).toList());
+                    }
+                  }),
+              StreamBuilder<QuerySnapshot>(
+                  stream: Firestore.instance.collection('activity').snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError)
+                      return new Text('Error: ${snapshot.error}');
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return new Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      default:
+                        return new ListView(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: snapshot.data.documents
+                                .where((DocumentSnapshot doc) {
+                              return _storage.getItem(doc.documentID) != null
+                                  ? _storage.getItem(doc.documentID) == 'true'
+                                  : false;
+                            }).map((DocumentSnapshot doc) {
+                              return Hero(
+                                tag: doc.documentID.toString(),
+                                child: ActivityCard(
+                                  id: doc.documentID,
+                                  title: doc['title'],
+                                  imageUrl: doc['imageUrl'],
+                                  category: 'activity',
+                                ),
+                              );
+                            }).toList());
+                    }
+                  }),
+              StreamBuilder<QuerySnapshot>(
+                  stream:
+                      Firestore.instance.collection('competition').snapshots(),
+                  builder: (BuildContext context,
+                      AsyncSnapshot<QuerySnapshot> snapshot) {
+                    if (snapshot.hasError)
+                      return new Text('Error: ${snapshot.error}');
+                    switch (snapshot.connectionState) {
+                      case ConnectionState.waiting:
+                        return new Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      default:
+                        return new ListView(
+                            scrollDirection: Axis.vertical,
+                            shrinkWrap: true,
+                            children: snapshot.data.documents
+                                .where((DocumentSnapshot doc) {
+                              return _storage.getItem(doc.documentID) != null
+                                  ? _storage.getItem(doc.documentID) == 'true'
+                                  : false;
+                            }).map((DocumentSnapshot doc) {
+                              return Hero(
+                                tag: doc.documentID.toString(),
+                                child: ActivityCard(
+                                  id: doc.documentID,
+                                  title: doc['title'],
+                                  imageUrl: doc['imageUrl'],
+                                  category: 'competition',
+                                ),
+                              );
+                            }).toList());
+                    }
+                  }),
+            ],
+          ),
+        ));
   }
 }
-
+//ListView(
+//children: [
+//Hero(
+//tag: 'Ie75XgFvInvcd63ykfeS',
+//child: ActivityCard(
+//id: 'Ie75XgFvInvcd63ykfeS',
+//title: 'SIT CRAFT Camp',
+//imageUrl: 'https://www.camphub.in.th/wp-content/uploads/2017/10/sit.png',
+//category: 'activity',
+//),
+//),
+//]
+//)
