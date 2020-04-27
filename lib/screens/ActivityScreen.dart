@@ -1,5 +1,6 @@
 import 'dart:math';
 
+import 'package:Navi/widgets/MapHolder.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/rendering.dart';
 import 'package:Navi/widgets/BigActivityCard.dart';
@@ -32,7 +33,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   size: 36,
                 ),
               ),
-              onTap: (){
+              onTap: () {
                 Navigator.pop(context);
               },
             ),
@@ -89,6 +90,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       return new Text("Loading");
                     }
                     var document = snapshot.data;
+                    var date = new DateTime.fromMillisecondsSinceEpoch(
+                        document['activityStartDateTime'].seconds * 1000);
                     return Column(children: [
                       BigActivityCard(
                         id: document.documentID,
@@ -118,15 +121,22 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                     SizedBox(
                                       width: 5,
                                     ),
-                                    Text('About')
+                                    new Text(
+                                      "About",
+                                      style: TextStyle(
+                                        fontFamily: "Segoe UI",
+                                        fontSize: 15,
+                                        color: Color(0xff5c5ed8),
+                                      ),
+                                    )
                                   ],
                                 )
                               : Row(
-                                children: <Widget>[
-                                  SizedBox(
-                                    width: 20,
-                                  ),
-                                  InkWell(
+                                  children: <Widget>[
+                                    SizedBox(
+                                      width: 20,
+                                    ),
+                                    InkWell(
                                       child: Container(
                                         child: Text('About'),
                                       ),
@@ -137,12 +147,12 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                         });
                                       },
                                     ),
-                                ],
-                              ),
+                                  ],
+                                ),
                           widget.isAboutOrDetail
                               ? Row(
-                                children: <Widget>[
-                                  InkWell(
+                                  children: <Widget>[
+                                    InkWell(
                                       child: Container(
                                         child: Text('Detail'),
                                       ),
@@ -153,11 +163,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                         });
                                       },
                                     ),
-                                  SizedBox(
-                                    width: 25,
-                                  )
-                                ],
-                              )
+                                    SizedBox(
+                                      width: 25,
+                                    )
+                                  ],
+                                )
                               : Row(
                                   children: <Widget>[
                                     Container(
@@ -171,14 +181,129 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                     SizedBox(
                                       width: 5,
                                     ),
-                                    Text('Detail'),
+                                    new Text(
+                                      "Detail",
+                                      style: TextStyle(
+                                        fontFamily: "Segoe UI",
+                                        fontSize: 15,
+                                        color: Color(0xff5c5ed8),
+                                      ),
+                                    ),
                                     SizedBox(
                                       width: 15,
                                     )
                                   ],
                                 )
                         ],
-                      )
+                      ),
+                      SizedBox(
+                        height: 30,
+                      ),
+                      widget.isAboutOrDetail
+                          ? Container(
+                              child: Column(
+                                children: <Widget>[
+                                  Row(
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width: 32,
+                                      ),
+                                      Image(
+                                        image: AssetImage(
+                                            'images/activity/time.png'),
+                                        height: 24,
+                                        width: 24,
+                                      ),
+                                      SizedBox(
+                                        width: 24,
+                                      ),
+                                      Column(
+                                        children: <Widget>[
+                                          Text(
+                                              '${date.day} / ${date.month} / ${(date.year.toInt() + 543)}'),
+                                          Text(
+                                              '${date.hour}:${date.minute < 10 ? '0' + date.minute.toString() : date.minute}')
+                                        ],
+                                        crossAxisAlignment:
+                                            CrossAxisAlignment.start,
+                                      )
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 12,
+                                  ),
+                                  Row(
+                                    children: <Widget>[
+                                      SizedBox(
+                                        width: 32,
+                                      ),
+                                      Icon(
+                                        Icons.person,
+                                        size: 24,
+                                        color: Color(0xFFFF8B51),
+                                      ),
+                                      SizedBox(
+                                        width: 24,
+                                      ),
+                                      Text('Staus')
+                                    ],
+                                  ),
+                                  SizedBox(
+                                    height: 72,
+                                  ),
+                                  Row(
+                                    mainAxisAlignment:
+                                        MainAxisAlignment.spaceBetween,
+                                    children: <Widget>[
+                                      Padding(
+                                        padding: const EdgeInsets.symmetric(
+                                            horizontal: 24),
+                                        child: Text(
+                                          'Free',
+                                          style: TextStyle(
+                                              color: Color(0xFFD8BC5C),
+                                              fontSize: 24),
+                                        ),
+                                      ),
+                                      InkWell(
+                                        onTap: () {},
+                                        child: new Container(
+                                          child: Center(
+                                            child: new Text(
+                                              "REGISTER!!",
+                                              style: TextStyle(
+                                                fontFamily: "Segoe UI",
+                                                fontSize: 20,
+                                                color: Color(0xffffffff),
+                                              ),
+                                            ),
+                                          ),
+                                          height: 68.00,
+                                          width: 177.00,
+                                          decoration: BoxDecoration(
+                                            color: Color(0xffff8b51),
+                                            borderRadius:
+                                                BorderRadius.circular(15.00),
+                                          ),
+                                        ),
+                                      )
+                                    ],
+                                  )
+                                ],
+                              ),
+                            )
+                          : Column(
+                              children: <Widget>[
+                                SizedBox(
+                                  child: MapHolder(
+                                      document['location']['lat'],
+                                      document['location']['lng'],
+                                      document['location']['name']
+                                  ),
+                                  height: 200,
+                                ),
+                              ],
+                            )
                     ]);
                   },
                 ),
