@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:google_maps_flutter/google_maps_flutter.dart';
 
@@ -7,13 +8,15 @@ class Map extends StatefulWidget {
   final double lat;
   final double lng;
   final String name;
-  Map(this.lat, this.lng,this.name);
+  final DocumentSnapshot doc;
+  Map(this.lat, this.lng,this.name,this.doc);
   @override
   State<Map> createState() => MapState();
 }
 
 class MapState extends State<Map> {
-//  LatLng targetLocation = new LatLng(widget.lat, widget.lng);
+
+  final Set<Marker> _markers = {};
   Completer<GoogleMapController> _controller = Completer();
   static final CameraPosition _kKMUTT = CameraPosition(
     target: LatLng(13.650888,100.4918183),
@@ -28,9 +31,26 @@ class MapState extends State<Map> {
 
   @override
   Widget build(BuildContext context) {
+    LatLng targetLocation = new LatLng(widget.lat,widget.lng);
+    _markers.add(
+      Marker(
+        markerId: MarkerId('1'),
+        position: targetLocation,
+        infoWindow: InfoWindow(
+          title: widget.doc['location']['name']
+        )
+      )
+    );
     return GoogleMap(
         mapType: MapType.normal,
-        initialCameraPosition: _kKMUTT,
+        initialCameraPosition: CameraPosition(
+          target: targetLocation,
+          zoom: 17
+        ),
+        rotateGesturesEnabled: false,
+        scrollGesturesEnabled: false,
+        tiltGesturesEnabled: false,
+        markers: _markers,
         onMapCreated: (GoogleMapController controller) {
           _controller.complete(controller);
         },

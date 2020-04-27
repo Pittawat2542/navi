@@ -25,65 +25,71 @@ class _ActivityScreenState extends State<ActivityScreen> {
     if (widget.activityId != null) {
       return Scaffold(
         appBar: _buildAppBar(context),
-        body: Stack(
-          children: <Widget>[
-            Container(
-              color: Color(0xFFEEEEEE),
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: StreamBuilder<DocumentSnapshot>(
-                stream: Firestore.instance
-                    .collection(widget.category)
-                    .document(widget.activityId)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return new Center(
-                      child: CircularProgressIndicator(),
-                    );
-                  }
-                  var document = snapshot.data;
-                  var date = new DateTime.fromMillisecondsSinceEpoch(
-                      document['activityStartDateTime'].seconds * 1000);
-                  return Column(
-                    children: [
-                      Hero(
-                        tag: document.documentID.toString(),
-                        child: ActivityCard(
-                          id: document.documentID,
-                          title: document["title"],
-                          imageUrl: document["imageUrl"],
-                          height: 228,
-                          isActivityDetail: true,
-                        ),
-                      ),
-                      SizedBox(
-                        height: 25,
-                      ),
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: <Widget>[
-                          isAboutOrDetail
-                              ? _buildAboutTabActive()
-                              : _buildAboutTabInactive(),
-                          isAboutOrDetail
-                              ? _buildDetailInactive()
-                              : _buildDetailActive()
-                        ],
-                      ),
-                      SizedBox(
-                        height: 30,
-                      ),
-                      isAboutOrDetail
-                          ? _buildAboutContent(date, document)
-                          : _buildDetailContent(document)
-                    ],
-                  );
-                },
+        body: SingleChildScrollView(
+          child: Stack(
+            children: <Widget>[
+              Container(
+                color: Color(0xFFEEEEEE),
               ),
-            ),
-          ],
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: Firestore.instance
+                      .collection(widget.category)
+                      .document(widget.activityId)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return new Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    var document = snapshot.data;
+                    var lastRegisDate = new DateTime.fromMillisecondsSinceEpoch(
+                        document['registrationEndDateTime'].seconds * 1000);
+                    var startDate = new DateTime.fromMillisecondsSinceEpoch(
+                        document['activityStartDateTime'].seconds * 1000);
+                    var endDate = new DateTime.fromMillisecondsSinceEpoch(
+                        document['activityEndDateTime'].seconds * 1000);
+                    return Column(
+                      children: [
+                        Hero(
+                          tag: document.documentID.toString(),
+                          child: ActivityCard(
+                            id: document.documentID,
+                            title: document["title"],
+                            imageUrl: document["imageUrl"],
+                            height: 228,
+                            isActivityDetail: true,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 5,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            isAboutOrDetail
+                                ? _buildAboutTabActive()
+                                : _buildAboutTabInactive(),
+                            isAboutOrDetail
+                                ? _buildDetailInactive()
+                                : _buildDetailActive()
+                          ],
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        isAboutOrDetail
+                            ? _buildAboutContent(lastRegisDate, document)
+                            : _buildDetailContent(startDate, endDate, document)
+                      ],
+                    );
+                  },
+                ),
+              ),
+            ],
+          ),
         ),
       );
     }
@@ -116,15 +122,26 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
-  Column _buildDetailContent(DocumentSnapshot document) {
+  Column _buildDetailContent(
+      DateTime startDate, DateTime endDate, DocumentSnapshot document) {
     return Column(
+      crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text('Location : ${document['location']['name']}'),
+        ),
+        Padding(
+          padding: const EdgeInsets.all(8.0),
+          child: Text(
+              'Time : ${startDate.day}/${startDate.month}/${(startDate.year.toInt() + 543)} ${startDate.hour}:${startDate.minute < 10 ? '0' + startDate.minute.toString() : startDate.minute} - ${endDate.day}/${endDate.month}/${(endDate.year.toInt() + 543)} ${endDate.hour}:${endDate.minute < 10 ? '0' + endDate.minute.toString() : endDate.minute}'),
+        ),
         SizedBox(
           child: MapHolder(
-            targetName: document['location']['name'],
-            targetLat: document['location']['lat'],
-            targetLng: document['location']['lng'],
-          ),
+              targetName: document['location']['name'],
+              targetLat: document['location']['lat'],
+              targetLng: document['location']['lng'],
+              doc: document),
           height: 200,
         ),
       ],
