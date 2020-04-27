@@ -83,8 +83,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
                                 ? _buildAboutTabActive()
                                 : _buildAboutTabInactive(),
                             _isAboutOrDetail
-                                ? _buildDetailInactive()
-                                : _buildDetailActive()
+                                ? _buildDetailTabInactive()
+                                : _buildDetailTabActive()
                           ],
                         ),
                         SizedBox(
@@ -274,7 +274,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
-  Row _buildDetailActive() {
+  Row _buildDetailTabActive() {
     return Row(
       children: <Widget>[
         Container(
@@ -293,6 +293,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
           style: TextStyle(
             fontSize: 15,
             color: Colors.deepPurple,
+            decoration: TextDecoration.underline,
           ),
         ),
         SizedBox(
@@ -302,7 +303,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
-  Row _buildDetailInactive() {
+  Row _buildDetailTabInactive() {
     return Row(
       children: <Widget>[
         InkWell(
@@ -364,6 +365,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
           style: TextStyle(
             fontSize: 15,
             color: Colors.deepPurple,
+            decoration: TextDecoration.underline,
           ),
         )
       ],
