@@ -1,5 +1,6 @@
 import 'package:Navi/screens/PlaceholderScreen.dart';
 import 'package:flutter/material.dart';
+import 'package:Navi/screens/ActivityScreen.dart';
 
 class ActivityCard extends StatelessWidget {
   final String id;
@@ -16,7 +17,7 @@ class ActivityCard extends StatelessWidget {
         //TODO: Navigate to the ActivityDetailScreen with id passed
         print(id);
         Navigator.push(context,
-            MaterialPageRoute(builder: (context) => PlaceholderScreen()));
+            MaterialPageRoute(builder: (context) => ActivityScreen(id)));
       },
       child: Container(
         margin: EdgeInsets.only(
