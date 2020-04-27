@@ -8,16 +8,17 @@ class ActivityCard extends StatelessWidget {
   final String imageUrl;
   final double height;
   final bool isActivityDetail;
+  final String category;
 
   ActivityCard(
-      {@required this.id, @required this.title, @required this.imageUrl, this.isActivityDetail = false, this.height});
+      {@required this.id, @required this.title, @required this.imageUrl, this.isActivityDetail = false, this.height, @required this.category});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
         !this.isActivityDetail ? Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ActivityScreen(id))) : () {};
+            MaterialPageRoute(builder: (context) => ActivityScreen(id, category))) : () {};
       },
       child: Container(
         margin: EdgeInsets.only(

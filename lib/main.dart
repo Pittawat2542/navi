@@ -1,7 +1,7 @@
+import 'package:flutter/material.dart';
+
 import 'package:Navi/widgets/HomeBottomNavigationBar.dart';
 import 'package:Navi/screens/ActivityListScreen.dart';
-import 'package:Navi/screens/PlaceholderScreen.dart';
-import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
 
@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
         primarySwatch: Colors.deepOrange,
       ),
-      home: MyHomePage(title: 'KMUTT'),
+      home: MyHomePage(title: 'Navi'),
     );
   }
 }
@@ -29,7 +29,8 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
-  //TODO: Make tab dynamic -> using array
+  static final tabBar = ['news', 'activity', 'competition'];
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -45,19 +46,20 @@ class _MyHomePageState extends State<MyHomePage> {
             ),
             labelColor: Colors.orangeAccent,
             unselectedLabelColor: Colors.white,
-            tabs: <Widget>[
-              Tab(text: 'News'),
-              Tab(text: 'Activity'),
-              Tab(text: 'Competition'),
-            ],
+            tabs: tabBar
+                .map(
+                    (tab) => Tab(text: tab[0].toUpperCase() + tab.substring(1),),)
+                .toList(),
           ),
         ),
         body: TabBarView(
-          children: <Widget>[
-            PlaceholderScreen(),
-            ActivityListScreen(),
-            PlaceholderScreen(),
-          ],
+          children: tabBar
+              .map(
+                (tab) => ActivityListScreen(
+                  category: tab,
+                ),
+              )
+              .toList(),
         ),
         bottomNavigationBar: HomeBottomNavigationBar(),
       ),

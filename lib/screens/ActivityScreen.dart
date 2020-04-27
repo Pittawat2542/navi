@@ -8,8 +8,9 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 
 class ActivityScreen extends StatefulWidget {
   final String activityId;
+  final String category;
 
-  ActivityScreen(this.activityId);
+  ActivityScreen(this.activityId, this.category);
 
   @override
   _ActivityScreenState createState() => _ActivityScreenState();
@@ -33,7 +34,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
               padding: const EdgeInsets.all(16.0),
               child: StreamBuilder<DocumentSnapshot>(
                 stream: Firestore.instance
-                    .collection('activity')
+                    .collection(widget.category)
                     .document(widget.activityId)
                     .snapshots(),
                 builder: (context, snapshot) {

@@ -4,10 +4,9 @@ import 'package:flutter/material.dart';
 
 class ActivityListScreen extends StatefulWidget {
   final String query;
+  final String category;
 
-  //TODO: Add support for category
-
-  ActivityListScreen({this.query});
+  ActivityListScreen({this.query, this.category});
 
   @override
   _ActivityListScreenState createState() => _ActivityListScreenState();
@@ -17,12 +16,11 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
   @override
   Widget build(BuildContext context) {
     if (widget.query != null && widget.query.isNotEmpty) {
+      //TODO: Add category support for search
       return _buildSearchResultActivityList();
     }
 
-    //TODO: Support category here
-
-    return _buildNormalActivityList();
+    return _buildNormalActivityList(widget.category);
   }
 
   Padding _buildSearchResultActivityList() {
@@ -47,17 +45,7 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
               return new ListView(
                 children:
                     snapshot.data.documents.map((DocumentSnapshot document) {
-                  return Column(
-                    children: <Widget>[
-                      Hero(
-                          tag: document.documentID.toString(),
-                          child: ActivityCard(
-                            id: document.documentID,
-                            title: document["title"],
-                            imageUrl: document["imageUrl"],
-                          )),
-                    ],
-                  );
+                  return _buildActivityCard(document);
                 }).toList(),
               );
           }
@@ -66,11 +54,11 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
     );
   }
 
-  Padding _buildNormalActivityList() {
+  Padding _buildNormalActivityList(String category) {
     return Padding(
     padding: const EdgeInsets.all(16.0),
     child: StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection('activity').snapshots(),
+      stream: Firestore.instance.collection(category).snapshots(),
       builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
         if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
         switch (snapshot.connectionState) {
@@ -82,22 +70,27 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
             return new ListView(
               children:
                   snapshot.data.documents.map((DocumentSnapshot document) {
-                return Column(
-                  children: <Widget>[
-                    Hero(
-                        tag: document.documentID.toString(),
-                        child: ActivityCard(
-                          id: document.documentID,
-                          title: document["title"],
-                          imageUrl: document["imageUrl"],
-                        )),
-                  ],
-                );
+                return _buildActivityCard(document);
               }).toList(),
             );
         }
       },
     ),
   );
+  }
+
+  Column _buildActivityCard(DocumentSnapshot document) {
+    return Column(
+                children: <Widget>[
+                  Hero(
+                      tag: document.documentID.toString(),
+                      child: ActivityCard(
+                        id: document.documentID,
+                        title: document["title"],
+                        imageUrl: document["imageUrl"],
+                        category: widget.category,
+                      )),
+                ],
+              );
   }
 }
