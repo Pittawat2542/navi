@@ -83,7 +83,7 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
                                       .map((DocumentSnapshot document) {
                                     return _buildActivityCard(document, 'news');
                                   }).toList(),
-                                  ...snapshot2.data.documents
+                                  ...snapshot1.data.documents
                                       .map((DocumentSnapshot document) {
                                     return _buildActivityCard(
                                         document, 'activity');
