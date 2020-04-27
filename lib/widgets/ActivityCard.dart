@@ -18,7 +18,7 @@ class ActivityCard extends StatelessWidget {
     return InkWell(
       onTap: () {
         !this.isActivityDetail ? Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ActivityScreen(id, category))) : () {};
+            MaterialPageRoute(builder: (context) => ActivityScreen(id, title, category.toString()))) : () {};
       },
       child: Container(
         margin: EdgeInsets.only(

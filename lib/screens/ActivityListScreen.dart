@@ -16,14 +16,13 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
   @override
   Widget build(BuildContext context) {
     if (widget.query != null && widget.query.isNotEmpty) {
-      //TODO: Add category support for search
-      return _buildSearchResultActivityList();
+      return _buildSearchResultActivityList(widget.category);
     }
 
     return _buildNormalActivityList(widget.category);
   }
 
-  Padding _buildSearchResultActivityList() {
+  Padding _buildSearchResultActivityList(String category) {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: StreamBuilder<QuerySnapshot>(
@@ -45,7 +44,7 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
               return new ListView(
                 children:
                     snapshot.data.documents.map((DocumentSnapshot document) {
-                  return _buildActivityCard(document);
+                  return _buildActivityCard(document, category);
                 }).toList(),
               );
           }
@@ -70,7 +69,7 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
             return new ListView(
               children:
                   snapshot.data.documents.map((DocumentSnapshot document) {
-                return _buildActivityCard(document);
+                return _buildActivityCard(document, category);
               }).toList(),
             );
         }
@@ -79,7 +78,7 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
   );
   }
 
-  Column _buildActivityCard(DocumentSnapshot document) {
+  Column _buildActivityCard(DocumentSnapshot document, String category) {
     return Column(
                 children: <Widget>[
                   Hero(
@@ -88,7 +87,7 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
                         id: document.documentID,
                         title: document["title"],
                         imageUrl: document["imageUrl"],
-                        category: widget.category,
+                        category: category,
                       )),
                 ],
               );
