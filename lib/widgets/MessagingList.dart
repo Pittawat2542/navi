@@ -2,12 +2,12 @@ import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:Navi/models/Message.dart';
 
-class MessagingWidget extends StatefulWidget {
+class MessagingList extends StatefulWidget {
   @override
-  _MessagingWidgetState createState() => _MessagingWidgetState();
+  _MessagingListState createState() => _MessagingListState();
 }
 
-class _MessagingWidgetState extends State<MessagingWidget> {
+class _MessagingListState extends State<MessagingList> {
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final List<Message> messages = [];
 
@@ -43,12 +43,22 @@ class _MessagingWidgetState extends State<MessagingWidget> {
   }
 
   @override
-  Widget build(BuildContext context) => ListView(
-    children: messages.map(buildMessage).toList(),
-  );
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(),
+      body: ListView(
+        children: messages.map(buildMessage).toList(),
+      ),
+    );
+  }
 
-  Widget buildMessage(Message message) => ListTile(
-    title: Text(message.title),
-    subtitle: Text(message.body),
+  Widget buildMessage(Message message) => Column(
+    children: <Widget>[
+      ListTile(
+        title: Text(message.title),
+        subtitle: Text(message.body),
+      ),
+      Divider()
+    ],
   );
 }
