@@ -30,6 +30,13 @@
             {
               "client_id": "366094836049-r4f0o884kk8kd528iqflrkg3k5p5l04i.apps.googleusercontent.com",
               "client_type": 3
+            },
+            {
+              "client_id": "366094836049-148jdr8r4a77of1t40otfqqq7s2fjiv8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kmuttlx.navi"
+              }
             }
           ]
         }

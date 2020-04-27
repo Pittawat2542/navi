@@ -2,6 +2,7 @@ import 'package:Navi/widgets/SolidIndicator.dart';
 import 'package:Navi/widgets/HomeBottomNavigationBar.dart';
 import 'package:Navi/screens/ActivityListScreen.dart';
 import 'package:Navi/screens/PlaceholderScreen.dart';
+import 'package:Navi/widget/messaging_widget.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
