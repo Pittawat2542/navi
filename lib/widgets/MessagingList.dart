@@ -52,8 +52,13 @@ class _MessagingListState extends State<MessagingList> {
     );
   }
 
-  Widget buildMessage(Message message) => ListTile(
-    title: Text(message.title),
-    subtitle: Text(message.body),
+  Widget buildMessage(Message message) => Column(
+    children: <Widget>[
+      ListTile(
+        title: Text(message.title),
+        subtitle: Text(message.body),
+      ),
+      Divider()
+    ],
   );
 }
