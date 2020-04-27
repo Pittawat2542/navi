@@ -20,6 +20,7 @@ class ActivityScreen extends StatefulWidget {
 class _ActivityScreenState extends State<ActivityScreen> {
   bool isFavorite = false;
   bool isAboutOrDetail = true;
+  bool isRegistered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -62,6 +63,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                             imageUrl: document["imageUrl"],
                             height: 228,
                             isActivityDetail: true,
+                            category: 'activity',
                           ),
                         ),
                         SizedBox(
@@ -91,6 +93,13 @@ class _ActivityScreenState extends State<ActivityScreen> {
               ),
             ],
           ),
+        ),
+      );
+    } else {
+      return Scaffold(
+        appBar: AppBar(),
+        body: Center(
+          child: Text("No activity id!"),
         ),
       );
     }
@@ -221,13 +230,17 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ? 'FREE'
                       : document['price'].toString(),
                   style: TextStyle(
-                    color: Colors.yellow[700],
+                    color: Colors.yellow[800],
                     fontSize: 24,
                   ),
                 ),
               ),
               InkWell(
-                onTap: () {},
+                onTap: () {
+                  setState(() {
+                    isRegistered = !isRegistered;
+                  });
+                },
                 child: Container(
                   child: Center(
                     child: const Text(
@@ -241,7 +254,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   height: MediaQuery.of(context).size.height / 15,
                   width: MediaQuery.of(context).size.width / 2,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    color: isRegistered ? Colors.grey : Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(15.00),
                   ),
                 ),

@@ -11,14 +11,24 @@ class ActivityCard extends StatelessWidget {
   final String category;
 
   ActivityCard(
-      {@required this.id, @required this.title, @required this.imageUrl, this.isActivityDetail = false, this.height, @required this.category});
+      {@required this.id,
+      @required this.title,
+      @required this.imageUrl,
+      this.isActivityDetail = false,
+      this.height,
+      @required this.category});
 
   @override
   Widget build(BuildContext context) {
     return InkWell(
       onTap: () {
-        !this.isActivityDetail ? Navigator.push(context,
-            MaterialPageRoute(builder: (context) => ActivityScreen(id, title, category.toString()))) : () {};
+        !this.isActivityDetail
+            ? Navigator.push(
+                context,
+                MaterialPageRoute(
+                    builder: (context) =>
+                        ActivityScreen(id, title, category.toString())))
+            : () {};
       },
       child: Container(
         margin: EdgeInsets.only(
@@ -63,10 +73,11 @@ class ActivityCard extends StatelessWidget {
                   child: Text(
                     title,
                     style: TextStyle(
-                        fontSize: 24.0,
-                        fontWeight: FontWeight.bold,
-                        letterSpacing: 1.2,
-                        color: Colors.white),
+                      fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
+                      letterSpacing: 1.2,
+                      color: Colors.white,
+                    ),
                   ),
                 )
               ],

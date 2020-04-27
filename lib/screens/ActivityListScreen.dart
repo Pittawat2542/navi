@@ -27,13 +27,12 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
       padding: const EdgeInsets.all(16.0),
       child: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
-            .collection('activity')
+            .collection(category)
             .orderBy('title')
             .where('title', isGreaterThanOrEqualTo: widget.query)
             .where('title', isLessThanOrEqualTo: widget.query + '\uF7FF')
             .snapshots(),
-        builder:
-            (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
@@ -55,41 +54,41 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
 
   Padding _buildNormalActivityList(String category) {
     return Padding(
-    padding: const EdgeInsets.all(16.0),
-    child: StreamBuilder<QuerySnapshot>(
-      stream: Firestore.instance.collection(category).snapshots(),
-      builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-        if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
-        switch (snapshot.connectionState) {
-          case ConnectionState.waiting:
-            return new Center(
-              child: CircularProgressIndicator(),
-            );
-          default:
-            return new ListView(
-              children:
-                  snapshot.data.documents.map((DocumentSnapshot document) {
-                return _buildActivityCard(document, category);
-              }).toList(),
-            );
-        }
-      },
-    ),
-  );
+      padding: const EdgeInsets.all(16.0),
+      child: StreamBuilder<QuerySnapshot>(
+        stream: Firestore.instance.collection(category).snapshots(),
+        builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
+          if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+          switch (snapshot.connectionState) {
+            case ConnectionState.waiting:
+              return new Center(
+                child: CircularProgressIndicator(),
+              );
+            default:
+              return new ListView(
+                children:
+                    snapshot.data.documents.map((DocumentSnapshot document) {
+                  return _buildActivityCard(document, category);
+                }).toList(),
+              );
+          }
+        },
+      ),
+    );
   }
 
   Column _buildActivityCard(DocumentSnapshot document, String category) {
     return Column(
-                children: <Widget>[
-                  Hero(
-                      tag: document.documentID.toString(),
-                      child: ActivityCard(
-                        id: document.documentID,
-                        title: document["title"],
-                        imageUrl: document["imageUrl"],
-                        category: category,
-                      )),
-                ],
-              );
+      children: <Widget>[
+        Hero(
+            tag: document.documentID.toString(),
+            child: ActivityCard(
+              id: document.documentID,
+              title: document["title"],
+              imageUrl: document["imageUrl"],
+              category: category,
+            )),
+      ],
+    );
   }
 }
