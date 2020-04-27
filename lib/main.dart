@@ -1,3 +1,4 @@
+import 'package:Navi/widgets/MessagingList.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Navi/widgets/HomeBottomNavigationBar.dart';
@@ -38,6 +39,15 @@ class _MyHomePageState extends State<MyHomePage> {
       child: Scaffold(
         appBar: AppBar(
           backgroundColor: Theme.of(context).primaryColor,
+          actions: <Widget>[
+            IconButton(
+              icon: Icon(Icons.notifications_active),
+              onPressed: () {
+                Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => MessagingList()));
+              },
+            ),
+          ],
           title: Text(widget.title),
           bottom: TabBar(
             indicator: BoxDecoration(
@@ -48,7 +58,10 @@ class _MyHomePageState extends State<MyHomePage> {
             unselectedLabelColor: Colors.white,
             tabs: tabBar
                 .map(
-                    (tab) => Tab(text: tab[0].toUpperCase() + tab.substring(1),),)
+                  (tab) => Tab(
+                    text: tab[0].toUpperCase() + tab.substring(1),
+                  ),
+                )
                 .toList(),
           ),
         ),

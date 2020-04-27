@@ -1,16 +1,17 @@
-import 'dart:math';
-
-import 'package:Navi/widgets/MapHolder.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/rendering.dart';
-import 'package:Navi/widgets/ActivityCard.dart';
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:share/share.dart';
+
+import 'package:Navi/widgets/ActivityCard.dart';
+import 'package:Navi/widgets/MapHolder.dart';
 
 class ActivityScreen extends StatefulWidget {
   final String activityId;
   final String category;
+  final String title;
 
-  ActivityScreen(this.activityId, this.category);
+  ActivityScreen(this.activityId, this.title, this.category);
 
   @override
   _ActivityScreenState createState() => _ActivityScreenState();
@@ -24,11 +25,11 @@ class _ActivityScreenState extends State<ActivityScreen> {
   Widget build(BuildContext context) {
     if (widget.activityId != null) {
       return Scaffold(
-        appBar: _buildAppBar(context),
+        appBar: _buildAppBar(context, widget.title),
         body: Stack(
           children: <Widget>[
             Container(
-              color: Color(0xFFEEEEEE),
+              color: Colors.white,
             ),
             Padding(
               padding: const EdgeInsets.all(16.0),
@@ -89,7 +90,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
     }
   }
 
-  AppBar _buildAppBar(BuildContext context) {
+  AppBar _buildAppBar(BuildContext context, String title) {
     return AppBar(
       actions: <Widget>[
         IconButton(
@@ -109,7 +110,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
             color: Colors.white,
           ),
           onPressed: () {
-            //TODO: Call share sheet
+            Share.share(title);
           },
         ),
       ],
