@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share/share.dart';
+import 'package:localstorage/localstorage.dart';
 
 import 'package:Navi/widgets/ActivityCard.dart';
 import 'package:Navi/widgets/MapHolder.dart';
@@ -18,15 +19,20 @@ class ActivityScreen extends StatefulWidget {
 }
 
 class _ActivityScreenState extends State<ActivityScreen> {
-  bool isFavorite = false;
-  bool isAboutOrDetail = true;
-  bool isRegistered = false;
+  final LocalStorage _storage = new LocalStorage('favorites');
+
+  bool _isFavorite = false;
+  bool _isAboutOrDetail = true;
+  bool _isRegistered = false;
 
   @override
   Widget build(BuildContext context) {
+    bool isFavoriteStorage = _storage.getItem(widget.activityId) == 'true' ? true : false;
+    _isFavorite = isFavoriteStorage;
+
     if (widget.activityId != null) {
       return Scaffold(
-        appBar: _buildAppBar(context, widget.title),
+        appBar: _buildAppBar(context, widget.title, widget.activityId),
         body: SingleChildScrollView(
           child: Stack(
             children: <Widget>[
@@ -46,8 +52,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         child: CircularProgressIndicator(),
                       );
                     }
+
                     var document = snapshot.data;
-                    var lastRegisDate = new DateTime.fromMillisecondsSinceEpoch(
+                    var lastRegisterDate = new DateTime.fromMillisecondsSinceEpoch(
                         document['registrationEndDateTime'].seconds * 1000);
                     var startDate = new DateTime.fromMillisecondsSinceEpoch(
                         document['activityStartDateTime'].seconds * 1000);
@@ -72,10 +79,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
-                            isAboutOrDetail
+                            _isAboutOrDetail
                                 ? _buildAboutTabActive()
                                 : _buildAboutTabInactive(),
-                            isAboutOrDetail
+                            _isAboutOrDetail
                                 ? _buildDetailInactive()
                                 : _buildDetailActive()
                           ],
@@ -83,8 +90,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         SizedBox(
                           height: 30,
                         ),
-                        isAboutOrDetail
-                            ? _buildAboutContent(lastRegisDate, document)
+                        _isAboutOrDetail
+                            ? _buildAboutContent(lastRegisterDate, document)
                             : _buildDetailContent(startDate,endDate,document)
                       ],
                     );
@@ -119,17 +126,18 @@ class _ActivityScreenState extends State<ActivityScreen> {
     return result;
   }
 
-  AppBar _buildAppBar(BuildContext context, String title) {
+  AppBar _buildAppBar(BuildContext context, String title, String activityId) {
     return AppBar(
       actions: <Widget>[
         IconButton(
           icon: Icon(
             Icons.favorite,
-            color: isFavorite ? Colors.deepPurple : Colors.white,
+            color: _isFavorite ? Colors.deepPurple : Colors.white,
           ),
           onPressed: () {
             setState(() {
-              isFavorite = !isFavorite;
+              _isFavorite = !_isFavorite;
+              _storage.setItem(activityId, _isFavorite.toString());
             });
           },
         ),
@@ -238,7 +246,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
               InkWell(
                 onTap: () {
                   setState(() {
-                    isRegistered = !isRegistered;
+                    _isRegistered = !_isRegistered;
                   });
                 },
                 child: Container(
@@ -254,7 +262,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   height: MediaQuery.of(context).size.height / 15,
                   width: MediaQuery.of(context).size.width / 2,
                   decoration: BoxDecoration(
-                    color: isRegistered ? Colors.grey : Theme.of(context).primaryColor,
+                    color: _isRegistered ? Colors.grey : Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(15.00),
                   ),
                 ),
@@ -303,7 +311,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
           ),
           onTap: () {
             setState(() {
-              isAboutOrDetail = !isAboutOrDetail;
+              _isAboutOrDetail = !_isAboutOrDetail;
             });
           },
         ),
@@ -326,7 +334,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
           ),
           onTap: () {
             setState(() {
-              isAboutOrDetail = !isAboutOrDetail;
+              _isAboutOrDetail = !_isAboutOrDetail;
             });
           },
         ),

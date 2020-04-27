@@ -45,7 +45,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => MessagingList()));
-              },
+               },
             ),
           ],
           title: Text(widget.title),

@@ -77,18 +77,15 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
     );
   }
 
-  Column _buildActivityCard(DocumentSnapshot document, String category) {
-    return Column(
-      children: <Widget>[
-        Hero(
-            tag: document.documentID.toString(),
-            child: ActivityCard(
-              id: document.documentID,
-              title: document["title"],
-              imageUrl: document["imageUrl"],
-              category: category,
-            )),
-      ],
+  Hero _buildActivityCard(DocumentSnapshot document, String category) {
+    return Hero(
+      tag: document.documentID.toString(),
+      child: ActivityCard(
+        id: document.documentID,
+        title: document["title"],
+        imageUrl: document["imageUrl"],
+        category: category,
+      ),
     );
   }
 }

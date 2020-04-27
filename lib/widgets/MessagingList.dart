@@ -45,7 +45,9 @@ class _MessagingListState extends State<MessagingList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(),
+      appBar: AppBar(
+        title: Text("Notifications"),
+      ),
       body: ListView(
         children: messages.map(buildMessage).toList(),
       ),
