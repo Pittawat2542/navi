@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 
-/// Solid tab bar indicator.
 class SolidIndicator extends Decoration {
   @override
   BoxPainter createBoxPainter([VoidCallback onChanged]) {
@@ -21,7 +20,7 @@ class _SolidIndicatorPainter extends BoxPainter {
     assert(configuration.size != null);
 
     final Rect rect = offset & configuration.size;
-    final RRect rrect = RRect.fromRectAndRadius(rect, Radius.circular(40));
+    final RRect rrect = RRect.fromRectAndRadius(rect, Radius.circular(30));
     final Paint paint = Paint();
     paint.color = Colors.white;
     paint.style = PaintingStyle.fill;

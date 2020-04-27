@@ -1,8 +1,6 @@
-import 'package:Navi/widgets/SolidIndicator.dart';
 import 'package:Navi/widgets/HomeBottomNavigationBar.dart';
 import 'package:Navi/screens/ActivityListScreen.dart';
 import 'package:Navi/screens/PlaceholderScreen.dart';
-import 'package:Navi/widget/messaging_widget.dart';
 import 'package:flutter/material.dart';
 
 void main() => runApp(MyApp());
@@ -12,10 +10,9 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     return MaterialApp(
       debugShowCheckedModeBanner: false,
-      title: 'Flutter Demo',
+      title: 'Navi',
       theme: ThemeData(
-        //TODO Change appbar color to orange
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.deepOrange,
       ),
       home: MyHomePage(title: 'KMUTT'),
     );
@@ -32,17 +29,21 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  //TODO: Make tab dynamic -> using array
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
       length: 3,
       child: Scaffold(
         appBar: AppBar(
-          backgroundColor: Color(0xFFFF8B51),
+          backgroundColor: Theme.of(context).primaryColor,
           title: Text(widget.title),
           bottom: TabBar(
-            indicator: SolidIndicator(),
-            labelColor: Color(0xFFFF8B51),
+            indicator: BoxDecoration(
+              color: Colors.white,
+              borderRadius: BorderRadius.circular(30.0),
+            ),
+            labelColor: Colors.orangeAccent,
             unselectedLabelColor: Colors.white,
             tabs: <Widget>[
               Tab(text: 'News'),
@@ -58,15 +59,6 @@ class _MyHomePageState extends State<MyHomePage> {
             PlaceholderScreen(),
           ],
         ),
-        // floatingActionButton: FloatingActionButton(
-        //   onPressed: () {
-        //     showSearch(
-        //       context: context,
-        //       delegate: AppSearchDelegate(),
-        //     );
-        //   },
-        //   child: Icon(Icons.search),
-        // ),
         bottomNavigationBar: HomeBottomNavigationBar(),
       ),
     );

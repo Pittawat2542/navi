@@ -1,6 +1,6 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
-import 'package:Navi/model/message.dart';
+import 'package:Navi/models/Message.dart';
 
 class MessagingWidget extends StatefulWidget {
   @override

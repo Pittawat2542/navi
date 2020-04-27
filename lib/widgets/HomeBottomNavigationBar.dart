@@ -16,7 +16,7 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
       int itemIndex, IconData icon, String text, Function() action) {
     return Material(
       color:
-          _currentIndex == itemIndex ? Color(0xFFFF8B51) : Colors.transparent,
+          _currentIndex == itemIndex ? Colors.orangeAccent : Colors.transparent,
       borderRadius: BorderRadius.circular(30.0),
       child: InkWell(
         customBorder:
@@ -44,15 +44,16 @@ class _HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
   @override
   Widget build(context) {
     return Container(
+      margin: EdgeInsets.only(bottom: 16.0),
       height: 56,
       child: Row(
         mainAxisAlignment: MainAxisAlignment.spaceAround,
         children: <Widget>[
-          _bottomNavigationBarItem(0, Icons.bookmark, "save",() => print("0")),
+          _bottomNavigationBarItem(0, Icons.bookmark, "Save",() {
+            //TODO: Navigate to Favorite Screen
+          }),
           _bottomNavigationBarItem(1, Icons.search, "Explore",
               () => showSearch(context: context, delegate: AppSearchDelegate())),
-          _bottomNavigationBarItem(2, Icons.person, "User",
-              () => print("2")),
         ],
       ),
     );

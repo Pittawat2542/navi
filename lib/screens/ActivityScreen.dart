@@ -75,7 +75,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
                         height: 30,
                       ),
                       isAboutOrDetail
-                          ? _buildAboutContent(date)
+                          ? _buildAboutContent(date, document)
                           : _buildDetailContent(document)
                     ],
                   );
@@ -90,55 +90,29 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
   AppBar _buildAppBar(BuildContext context) {
     return AppBar(
-        backgroundColor: Color(0xFFEEEEEE),
-        leading: InkWell(
-          child: Transform.rotate(
-            angle: pi,
-            child: Icon(
-              Icons.play_arrow,
-              color: Color(0xFF50E076),
-              size: 36,
-            ),
+      actions: <Widget>[
+        IconButton(
+          icon: Icon(
+            Icons.favorite,
+            color: isFavorite ? Colors.red : Colors.white,
           ),
-          onTap: () {
-            Navigator.pop(context);
+          onPressed: () {
+            setState(() {
+              isFavorite = !isFavorite;
+            });
           },
         ),
-        actions: <Widget>[
-          RawMaterialButton(
-            onPressed: () {
-              setState(() {
-                isFavorite = !isFavorite;
-              });
-            },
-            child: isFavorite
-                ? Image(
-                    image: AssetImage('images/activity/heart.png'),
-                    fit: BoxFit.cover,
-                    height: 24,
-                    width: 24,
-                  )
-                : Icon(
-                    Icons.favorite,
-                    color: Colors.black,
-                    size: 24,
-                  ),
+        IconButton(
+          icon: Icon(
+            Icons.share,
+            color: Colors.white,
           ),
-          RawMaterialButton(
-            onPressed: () {
-              setState(() {
-                print('share');
-              });
-            },
-            child: Image(
-              image: AssetImage('images/activity/share.png'),
-              fit: BoxFit.cover,
-              height: 24,
-              width: 24,
-            ),
-          )
-        ],
-      );
+          onPressed: () {
+            //TODO: Call share sheet
+          },
+        ),
+      ],
+    );
   }
 
   Column _buildDetailContent(DocumentSnapshot document) {
@@ -146,7 +120,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
       children: <Widget>[
         SizedBox(
           child: MapHolder(
-            targetName: document["location"]["name"],
+            targetName: document['location']['name'],
             targetLat: document['location']['lat'],
             targetLng: document['location']['lng'],
           ),
@@ -156,7 +130,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
-  Container _buildAboutContent(DateTime date) {
+  Container _buildAboutContent(DateTime date, DocumentSnapshot document) {
     return Container(
       child: Column(
         children: <Widget>[
@@ -165,10 +139,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
               SizedBox(
                 width: 32,
               ),
-              Image(
-                image: AssetImage('images/activity/time.png'),
-                height: 24,
-                width: 24,
+              Icon(
+                Icons.access_time,
+                color: Theme.of(context).primaryColor,
               ),
               SizedBox(
                 width: 24,
@@ -194,13 +167,13 @@ class _ActivityScreenState extends State<ActivityScreen> {
               ),
               Icon(
                 Icons.person,
-                size: 24,
-                color: Color(0xFFFF8B51),
+                color: Theme.of(context).primaryColor,
               ),
               SizedBox(
                 width: 24,
               ),
-              Text('Staus')
+              //TODO: Create a method to get the string of status in long text format -> using document['attendeeStatus'] to check
+              const Text('Status')
             ],
           ),
           SizedBox(
@@ -211,29 +184,33 @@ class _ActivityScreenState extends State<ActivityScreen> {
             children: <Widget>[
               Padding(
                 padding: const EdgeInsets.symmetric(horizontal: 24),
-                //TODO: Add logic to handle price
                 child: Text(
-                  'Free',
-                  style: TextStyle(color: Color(0xFFD8BC5C), fontSize: 24),
+                  document['price'] == 0
+                      ? 'FREE'
+                      : document['price'].toString(),
+                  style: TextStyle(
+                    color: Colors.yellow[700],
+                    fontSize: 24,
+                  ),
                 ),
               ),
+              //TODO: Refactor this thing
               InkWell(
                 onTap: () {},
-                child: new Container(
+                child: Container(
                   child: Center(
-                    child: new Text(
-                      "REGISTER!!",
+                    child: const Text(
+                      "REGISTER",
                       style: TextStyle(
-                        fontFamily: "Segoe UI",
                         fontSize: 20,
-                        color: Color(0xffffffff),
+                        color: Colors.white,
                       ),
                     ),
                   ),
                   height: 68.00,
                   width: 177.00,
                   decoration: BoxDecoration(
-                    color: Color(0xffff8b51),
+                    color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(15.00),
                   ),
                 ),
@@ -252,7 +229,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
           height: 16.00,
           width: 16.00,
           decoration: BoxDecoration(
-            color: Color(0xff5c5ed8),
+            color: Colors.deepPurple,
             shape: BoxShape.circle,
           ),
         ),
@@ -260,11 +237,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
           width: 5,
         ),
         new Text(
-          "Detail",
+          'Detail',
           style: TextStyle(
-            fontFamily: "Segoe UI",
             fontSize: 15,
-            color: Color(0xff5c5ed8),
+            color: Colors.deepPurple,
           ),
         ),
         SizedBox(
@@ -324,7 +300,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
           height: 16.00,
           width: 16.00,
           decoration: BoxDecoration(
-            color: Color(0xff5c5ed8),
+            color: Colors.deepPurple,
             shape: BoxShape.circle,
           ),
         ),
@@ -332,11 +308,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
           width: 5,
         ),
         new Text(
-          "About",
+          'About',
           style: TextStyle(
-            fontFamily: "Segoe UI",
             fontSize: 15,
-            color: Color(0xff5c5ed8),
+            color: Colors.deepPurple,
           ),
         )
       ],
