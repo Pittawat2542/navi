@@ -27,7 +27,7 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
       padding: const EdgeInsets.all(16.0),
       child: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance
-            .collection(category)
+            .collection('news')
             .orderBy('title')
             .where('title', isGreaterThanOrEqualTo: widget.query)
             .where('title', isLessThanOrEqualTo: widget.query + '\uF7FF')
@@ -40,11 +40,66 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
                 child: CircularProgressIndicator(),
               );
             default:
-              return new ListView(
-                children:
-                    snapshot.data.documents.map((DocumentSnapshot document) {
-                  return _buildActivityCard(document, category);
-                }).toList(),
+              return StreamBuilder<QuerySnapshot>(
+                stream: Firestore.instance
+                    .collection('activity')
+                    .orderBy('title')
+                    .where('title', isGreaterThanOrEqualTo: widget.query)
+                    .where('title',
+                        isLessThanOrEqualTo: widget.query + '\uF7FF')
+                    .snapshots(),
+                builder: (BuildContext context,
+                    AsyncSnapshot<QuerySnapshot> snapshot1) {
+                  if (snapshot1.hasError)
+                    return new Text('Error: ${snapshot1.error}');
+                  switch (snapshot1.connectionState) {
+                    case ConnectionState.waiting:
+                      return new Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    default:
+                      return StreamBuilder<QuerySnapshot>(
+                        stream: Firestore.instance
+                            .collection('competition')
+                            .orderBy('title')
+                            .where('title',
+                                isGreaterThanOrEqualTo: widget.query)
+                            .where('title',
+                                isLessThanOrEqualTo: widget.query + '\uF7FF')
+                            .snapshots(),
+                        builder: (BuildContext context,
+                            AsyncSnapshot<QuerySnapshot> snapshot2) {
+                          if (snapshot2.hasError)
+                            return new Text('Error: ${snapshot2.error}');
+                          switch (snapshot2.connectionState) {
+                            case ConnectionState.waiting:
+                              return new Center(
+                                child: CircularProgressIndicator(),
+                              );
+                            default:
+                              return new ListView(
+                                children: [
+                                  ...snapshot.data.documents
+                                      .map((DocumentSnapshot document) {
+                                    return _buildActivityCard(document, 'news');
+                                  }).toList(),
+                                  ...snapshot2.data.documents
+                                      .map((DocumentSnapshot document) {
+                                    return _buildActivityCard(
+                                        document, 'activity');
+                                  }).toList(),
+                                  ...snapshot2.data.documents
+                                      .map((DocumentSnapshot document) {
+                                    return _buildActivityCard(
+                                        document, 'competition');
+                                  }).toList()
+                                ],
+                              );
+                          }
+                        },
+                      );
+                  }
+                },
               );
           }
         },
@@ -68,7 +123,6 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
               return new ListView(
                 children:
                     snapshot.data.documents.map((DocumentSnapshot document) {
-
                   return _buildActivityCard(document, category);
                 }).toList(),
               );
