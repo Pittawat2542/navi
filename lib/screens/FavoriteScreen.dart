@@ -12,7 +12,6 @@ class FavoriteScreen extends StatefulWidget {
 }
 
 class _FavoriteScreenState extends State<FavoriteScreen> {
-  //TODO: Add logic to load item from local storage and show all activity cards
   final LocalStorage _storage = new LocalStorage('favorites');
 
   @override
