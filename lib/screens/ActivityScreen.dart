@@ -26,22 +26,65 @@ class _ActivityScreenState extends State<ActivityScreen> {
     if (widget.activityId != null) {
       return Scaffold(
         appBar: _buildAppBar(context, widget.title),
-        body: Stack(
-          children: <Widget>[
-            Container(
-              color: Colors.white,
-            ),
-            Padding(
-              padding: const EdgeInsets.all(16.0),
-              child: StreamBuilder<DocumentSnapshot>(
-                stream: Firestore.instance
-                    .collection(widget.category)
-                    .document(widget.activityId)
-                    .snapshots(),
-                builder: (context, snapshot) {
-                  if (!snapshot.hasData) {
-                    return new Center(
-                      child: CircularProgressIndicator(),
+        body: SingleChildScrollView(
+          child: Stack(
+            children: <Widget>[
+              Container(
+                color: Colors.white,
+              ),
+              Padding(
+                padding: const EdgeInsets.all(16.0),
+                child: StreamBuilder<DocumentSnapshot>(
+                  stream: Firestore.instance
+                      .collection(widget.category)
+                      .document(widget.activityId)
+                      .snapshots(),
+                  builder: (context, snapshot) {
+                    if (!snapshot.hasData) {
+                      return new Center(
+                        child: CircularProgressIndicator(),
+                      );
+                    }
+                    var document = snapshot.data;
+                    var lastRegisDate = new DateTime.fromMillisecondsSinceEpoch(
+                        document['registrationEndDateTime'].seconds * 1000);
+                    var startDate = new DateTime.fromMillisecondsSinceEpoch(
+                        document['activityStartDateTime'].seconds * 1000);
+                    var endDate = new DateTime.fromMillisecondsSinceEpoch(
+                        document['activityEndDateTime'].seconds * 1000);
+                    return Column(
+                      children: [
+                        Hero(
+                          tag: document.documentID.toString(),
+                          child: ActivityCard(
+                            id: document.documentID,
+                            title: document["title"],
+                            imageUrl: document["imageUrl"],
+                            height: 228,
+                            isActivityDetail: true,
+                          ),
+                        ),
+                        SizedBox(
+                          height: 25,
+                        ),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                          children: <Widget>[
+                            isAboutOrDetail
+                                ? _buildAboutTabActive()
+                                : _buildAboutTabInactive(),
+                            isAboutOrDetail
+                                ? _buildDetailInactive()
+                                : _buildDetailActive()
+                          ],
+                        ),
+                        SizedBox(
+                          height: 30,
+                        ),
+                        isAboutOrDetail
+                            ? _buildAboutContent(lastRegisDate, document)
+                            : _buildDetailContent(startDate,endDate,document)
+                      ],
                     );
                   },
                 ),
@@ -125,9 +168,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
               Column(
                 children: <Widget>[
                   Text(
-                      '${date.day} / ${date.month} / ${(date.year.toInt() + 543)}'),
+                      'Last Register date : ${date.day} / ${date.month} / ${(date.year.toInt() + 543)}'),
                   Text(
-                      '${date.hour}:${date.minute < 10 ? '0' + date.minute.toString() : date.minute}')
+                      'Time : ${date.hour}:${date.minute < 10 ? '0' + date.minute.toString() : date.minute}')
                 ],
                 crossAxisAlignment: CrossAxisAlignment.start,
               )

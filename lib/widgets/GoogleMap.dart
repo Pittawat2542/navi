@@ -33,28 +33,28 @@ class MapState extends State<Map> {
   Widget build(BuildContext context) {
     LatLng targetLocation = new LatLng(widget.lat,widget.lng);
     _markers.add(
-      Marker(
-        markerId: MarkerId('1'),
-        position: targetLocation,
-        infoWindow: InfoWindow(
-          title: widget.doc['location']['name']
+        Marker(
+            markerId: MarkerId('1'),
+            position: targetLocation,
+            infoWindow: InfoWindow(
+                title: widget.doc['location']['name']
+            )
         )
-      )
     );
     return GoogleMap(
-        mapType: MapType.normal,
-        initialCameraPosition: CameraPosition(
+      mapType: MapType.normal,
+      initialCameraPosition: CameraPosition(
           target: targetLocation,
           zoom: 17
-        ),
-        rotateGesturesEnabled: false,
-        scrollGesturesEnabled: false,
-        tiltGesturesEnabled: false,
-        markers: _markers,
-        onMapCreated: (GoogleMapController controller) {
-          _controller.complete(controller);
-        },
-      );
+      ),
+      rotateGesturesEnabled: false,
+      scrollGesturesEnabled: false,
+      tiltGesturesEnabled: false,
+      markers: _markers,
+      onMapCreated: (GoogleMapController controller) {
+        _controller.complete(controller);
+      },
+    );
   }
 
 }

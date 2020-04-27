@@ -11,15 +11,16 @@ class MapHolder extends StatelessWidget {
 
   MapHolder(
       {@required this.targetLat,
-      @required this.targetLng,
-      @required this.targetName,
-      @required this.doc});
+        @required this.targetLng,
+        @required this.targetName,
+        @required this.doc});
 
   @override
   Widget build(BuildContext context) {
     print(targetLat);
     print(targetLng);
     print(targetName);
+    print(doc);
     return Map(targetLat, targetLng, targetName,doc);
   }
 }
