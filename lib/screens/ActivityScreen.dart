@@ -90,13 +90,27 @@ class _ActivityScreenState extends State<ActivityScreen> {
     }
   }
 
+  String _generateAttendeeStatus(List attendeeStatus) {
+    String result = '';
+    attendeeStatus.forEach((status) {
+      if (status.startsWith('grade')) {
+        result += status[0].toUpperCase() + status.substring(1, 5) + ' ' + status.substring(5) + ', ';
+      }
+      if (status.startsWith('year')) {
+        result += status[0].toUpperCase() + status.substring(1, 4) + ' ' + status.substring(4) + ', ';
+      }
+    });
+    result = result.substring(0, result.length - 2);
+    return result;
+  }
+
   AppBar _buildAppBar(BuildContext context, String title) {
     return AppBar(
       actions: <Widget>[
         IconButton(
           icon: Icon(
             Icons.favorite,
-            color: isFavorite ? Colors.red : Colors.white,
+            color: isFavorite ? Colors.deepPurple : Colors.white,
           ),
           onPressed: () {
             setState(() {
@@ -174,8 +188,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
               SizedBox(
                 width: 24,
               ),
-              //TODO: Create a method to get the string of status in long text format -> using document['attendeeStatus'] to check
-              const Text('Status')
+              Text(_generateAttendeeStatus(document["attendeeStatus"]))
             ],
           ),
           SizedBox(
@@ -196,7 +209,6 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   ),
                 ),
               ),
-              //TODO: Refactor this thing
               InkWell(
                 onTap: () {},
                 child: Container(
@@ -209,8 +221,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       ),
                     ),
                   ),
-                  height: 68.00,
-                  width: 177.00,
+                  height: MediaQuery.of(context).size.height / 15,
+                  width: MediaQuery.of(context).size.width / 2,
                   decoration: BoxDecoration(
                     color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(15.00),
