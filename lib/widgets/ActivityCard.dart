@@ -8,6 +8,7 @@ class ActivityCard extends StatelessWidget {
   final String imageUrl;
   final double height;
   final bool isActivityDetail;
+  final bool isFavoriteCard;
   final String category;
 
   ActivityCard(
@@ -15,6 +16,7 @@ class ActivityCard extends StatelessWidget {
       @required this.title,
       @required this.imageUrl,
       this.isActivityDetail = false,
+      this.isFavoriteCard = false,
       this.height,
       @required this.category});
 
@@ -70,14 +72,42 @@ class ActivityCard extends StatelessWidget {
                 Positioned(
                   left: 16.0,
                   bottom: 16.0,
-                  child: Text(
-                    title,
-                    style: TextStyle(
-                      fontSize: 24.0,
-                      fontWeight: FontWeight.bold,
-                      letterSpacing: 1.2,
-                      color: Colors.white,
-                    ),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: isFavoriteCard
+                        ? [
+                            Chip(
+                              label: Text(
+                                category[0].toUpperCase() +
+                                    category.substring(1),
+                                style: TextStyle(
+                                  color: Colors.white,
+                                ),
+                              ),
+                              backgroundColor: Colors.deepOrange,
+                              padding: EdgeInsets.all(4),
+                            ),
+                            Text(
+                              title,
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.2,
+                                color: Colors.white,
+                              ),
+                            )
+                          ]
+                        : [
+                            Text(
+                              title,
+                              style: TextStyle(
+                                fontSize: 24.0,
+                                fontWeight: FontWeight.bold,
+                                letterSpacing: 1.2,
+                                color: Colors.white,
+                              ),
+                            ),
+                          ],
                   ),
                 )
               ],
