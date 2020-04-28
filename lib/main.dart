@@ -1,8 +1,11 @@
 import 'package:Navi/widgets/MessagingList.dart';
 import 'package:flutter/material.dart';
 
+import 'package:Navi/screens/AppSearchDelegate.dart';
 import 'package:Navi/widgets/HomeBottomNavigationBar.dart';
 import 'package:Navi/screens/ActivityListScreen.dart';
+import 'package:Navi/screens/FavoriteScreen.dart';
+import 'package:Navi/screens/SettingsScreen.dart';
 
 void main() => runApp(MyApp());
 
@@ -45,7 +48,7 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () {
                 Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => MessagingList()));
-               },
+              },
             ),
           ],
           title: Text(widget.title),
@@ -74,7 +77,28 @@ class _MyHomePageState extends State<MyHomePage> {
               )
               .toList(),
         ),
-        bottomNavigationBar: HomeBottomNavigationBar(),
+        floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
+        floatingActionButton: FloatingActionButton(
+          onPressed: () =>
+              showSearch(context: context, delegate: AppSearchDelegate()),
+          tooltip: 'Explore',
+          child: Icon(Icons.search),
+          elevation: 2.0,
+        ),
+        bottomNavigationBar: HomeBottomNavigationBar(
+          items: [
+            HomeBottomNavigationBarItem(
+                icon: Icons.bookmark,
+                text: 'Save',
+                action: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => FavoriteScreen()))),
+            HomeBottomNavigationBarItem(
+                icon: Icons.settings,
+                text: 'Settings',
+                action: () => Navigator.of(context).push(
+                    MaterialPageRoute(builder: (context) => SettingsScreen()))),
+          ],
+        ),
       ),
     );
   }
