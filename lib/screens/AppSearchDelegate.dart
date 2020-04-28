@@ -7,7 +7,14 @@ class AppSearchDelegate extends SearchDelegate {
     assert(context != null);
     final ThemeData theme = Theme.of(context);
     assert(theme != null);
-    return theme;
+    return theme.copyWith(
+      textTheme: TextTheme(
+        title: TextStyle(
+          fontSize: 16.0,
+          color: Colors.white
+        )
+      )
+    );
   }
 
   @override
@@ -35,15 +42,31 @@ class AppSearchDelegate extends SearchDelegate {
   @override
   Widget buildResults(BuildContext context) {
     if (query.length < 3) {
-      return Column(
-        mainAxisAlignment: MainAxisAlignment.center,
-        children: <Widget>[
-          Center(
-            child: Text(
-              "Search term must be longer than 2 letters.",
+      return Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            const Icon(
+              Icons.info_outline,
+              size: 64.0,
             ),
-          )
-        ],
+            const SizedBox(
+              height: 16.0,
+            ),
+            const Text(
+              'Notice',
+              style: TextStyle(
+                fontSize: 24.0,
+                fontWeight: FontWeight.bold,
+              ),
+            ),
+            const SizedBox(
+              height: 8.0,
+            ),
+            const Text(
+                'Search term must contain at least 3 characters.')
+          ],
+        ),
       );
     }
 
