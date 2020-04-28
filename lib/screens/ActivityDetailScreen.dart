@@ -167,8 +167,8 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
       actions: <Widget>[
         IconButton(
           icon: Icon(
-            Icons.favorite,
-            color: _isFavorite ? Colors.lightBlueAccent : Colors.white,
+            _isFavorite ? Icons.favorite : Icons.favorite_border,
+            color:Colors.white,
           ),
           onPressed: () {
             setState(() {
