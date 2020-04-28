@@ -33,10 +33,10 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
             .where('title', isLessThanOrEqualTo: widget.query + '\uF7FF')
             .snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+          if (snapshot.hasError) return Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return new Center(
+              return Center(
                 child: CircularProgressIndicator(),
               );
             default:
@@ -51,10 +51,10 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot1) {
                   if (snapshot1.hasError)
-                    return new Text('Error: ${snapshot1.error}');
+                    return Text('Error: ${snapshot1.error}');
                   switch (snapshot1.connectionState) {
                     case ConnectionState.waiting:
-                      return new Center(
+                      return Center(
                         child: CircularProgressIndicator(),
                       );
                     default:
@@ -70,14 +70,14 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
                         builder: (BuildContext context,
                             AsyncSnapshot<QuerySnapshot> snapshot2) {
                           if (snapshot2.hasError)
-                            return new Text('Error: ${snapshot2.error}');
+                            return Text('Error: ${snapshot2.error}');
                           switch (snapshot2.connectionState) {
                             case ConnectionState.waiting:
-                              return new Center(
+                              return Center(
                                 child: CircularProgressIndicator(),
                               );
                             default:
-                              return new ListView(
+                              return ListView(
                                 children: [
                                   ...snapshot.data.documents
                                       .map((DocumentSnapshot document) {
@@ -113,14 +113,14 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
       child: StreamBuilder<QuerySnapshot>(
         stream: Firestore.instance.collection(category).snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
-          if (snapshot.hasError) return new Text('Error: ${snapshot.error}');
+          if (snapshot.hasError) return Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {
             case ConnectionState.waiting:
-              return new Center(
+              return Center(
                 child: CircularProgressIndicator(),
               );
             default:
-              return new ListView(
+              return ListView(
                 children:
                     snapshot.data.documents.map((DocumentSnapshot document) {
                   return _buildActivityCard(document, category);

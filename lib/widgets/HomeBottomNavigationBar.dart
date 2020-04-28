@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 class HomeBottomNavigationBarItem {
   HomeBottomNavigationBarItem({this.icon, this.text, this.action, this.name});
+
   IconData icon;
   String text;
   Function() action;
@@ -22,6 +23,7 @@ class HomeBottomNavigationBar extends StatefulWidget {
   }) {
     assert(this.items.length == 2 || this.items.length == 4);
   }
+
   final List<HomeBottomNavigationBarItem> items;
   final String centerItemText;
   final double height;
@@ -31,7 +33,6 @@ class HomeBottomNavigationBar extends StatefulWidget {
   final Color selectedColor;
   final NotchedShape notchedShape;
   final ValueChanged<int> onTabSelected;
-
 
   @override
   State<StatefulWidget> createState() => HomeBottomNavigationBarState();
@@ -80,8 +81,8 @@ class HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
               mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
                 Icon(item.icon, color: color, size: 30),
-                Offstage(
-                  offstage: _selectedIndex == index ? false : true,
+                Padding(
+                  padding: const EdgeInsets.only(left: 8.0),
                   child: Text(
                     item.text,
                     style: TextStyle(color: color),

@@ -1,11 +1,11 @@
-import 'package:Navi/widgets/MessagingList.dart';
 import 'package:flutter/material.dart';
 
 import 'package:Navi/screens/AppSearchDelegate.dart';
-import 'package:Navi/widgets/HomeBottomNavigationBar.dart';
 import 'package:Navi/screens/ActivityListScreen.dart';
 import 'package:Navi/screens/FavoriteScreen.dart';
 import 'package:Navi/screens/SettingsScreen.dart';
+import 'package:Navi/widgets/HomeBottomNavigationBar.dart';
+import 'package:Navi/widgets/MessagingList.dart';
 
 void main() => runApp(MyApp());
 
@@ -53,11 +53,12 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
           title: Text(widget.title),
           bottom: TabBar(
-            indicator: BoxDecoration(
-              color: Colors.white,
-              borderRadius: BorderRadius.circular(30.0),
-            ),
-            labelColor: Colors.orangeAccent,
+//            indicator: BoxDecoration(
+//              color: Colors.white,
+//              borderRadius: BorderRadius.circular(30.0),
+//            ),
+            labelColor: Colors.lightBlueAccent,
+            indicatorColor: Colors.lightBlueAccent,
             unselectedLabelColor: Colors.white,
             tabs: tabBar
                 .map(
@@ -81,7 +82,7 @@ class _MyHomePageState extends State<MyHomePage> {
         floatingActionButton: FloatingActionButton(
           onPressed: () =>
               showSearch(context: context, delegate: AppSearchDelegate()),
-          tooltip: 'Explore',
+          tooltip: 'Search',
           child: Icon(Icons.search),
           elevation: 2.0,
         ),
@@ -89,7 +90,7 @@ class _MyHomePageState extends State<MyHomePage> {
           items: [
             HomeBottomNavigationBarItem(
                 icon: Icons.bookmark,
-                text: 'Save',
+                text: 'Favorites',
                 action: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => FavoriteScreen()))),
             HomeBottomNavigationBarItem(

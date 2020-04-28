@@ -7,18 +7,18 @@ import 'package:localstorage/localstorage.dart';
 import 'package:Navi/widgets/ActivityCard.dart';
 import 'package:Navi/widgets/MapHolder.dart';
 
-class ActivityScreen extends StatefulWidget {
+class ActivityDetailScreen extends StatefulWidget {
   final String activityId;
   final String category;
   final String title;
 
-  ActivityScreen(this.activityId, this.title, this.category);
+  ActivityDetailScreen(this.activityId, this.title, this.category);
 
   @override
-  _ActivityScreenState createState() => _ActivityScreenState();
+  _ActivityDetailScreenState createState() => _ActivityDetailScreenState();
 }
 
-class _ActivityScreenState extends State<ActivityScreen> {
+class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
   final LocalStorage _storage = new LocalStorage('favorites');
 
   bool _isFavorite = false;
@@ -27,7 +27,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
 
   @override
   Widget build(BuildContext context) {
-    bool isFavoriteStorage = _storage.getItem(widget.activityId) == 'true' ? true : false;
+    bool isFavoriteStorage =
+        _storage.getItem(widget.activityId) == 'true' ? true : false;
     _isFavorite = isFavoriteStorage;
 
     if (widget.activityId != null) {
@@ -53,13 +54,20 @@ class _ActivityScreenState extends State<ActivityScreen> {
                       );
                     }
 
-                    var document = snapshot.data;
-                    var lastRegisterDate = new DateTime.fromMillisecondsSinceEpoch(
-                        document['registrationEndDateTime'].seconds * 1000);
-                    var startDate = new DateTime.fromMillisecondsSinceEpoch(
-                        document['activityStartDateTime'].seconds * 1000);
-                    var endDate = new DateTime.fromMillisecondsSinceEpoch(
-                        document['activityEndDateTime'].seconds * 1000);
+                    DocumentSnapshot document = snapshot.data;
+                    DateTime registrationStartDateTime =
+                        new DateTime.fromMillisecondsSinceEpoch(
+                            document['registrationStartDateTime'].seconds *
+                                1000);
+                    DateTime registrationEndDateTime =
+                        new DateTime.fromMillisecondsSinceEpoch(
+                            document['registrationEndDateTime'].seconds * 1000);
+                    DateTime eventStartDateTime =
+                        new DateTime.fromMillisecondsSinceEpoch(
+                            document['activityStartDateTime'].seconds * 1000);
+                    DateTime eventEndDateTime =
+                        new DateTime.fromMillisecondsSinceEpoch(
+                            document['activityEndDateTime'].seconds * 1000);
                     return Column(
                       children: [
                         Hero(
@@ -91,8 +99,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
                           height: 30,
                         ),
                         _isAboutOrDetail
-                            ? _buildAboutContent(lastRegisterDate, document)
-                            : _buildDetailContent(startDate,endDate,document)
+                            ? _buildAboutContent(registrationStartDateTime,
+                                registrationEndDateTime, document)
+                            : _buildDetailContent(
+                                eventStartDateTime, eventEndDateTime, document)
                       ],
                     );
                   },
@@ -116,14 +126,40 @@ class _ActivityScreenState extends State<ActivityScreen> {
     String result = '';
     attendeeStatus.forEach((status) {
       if (status.startsWith('grade')) {
-        result += status[0].toUpperCase() + status.substring(1, 5) + ' ' + status.substring(5) + ', ';
+        result += status[0].toUpperCase() +
+            status.substring(1, 5) +
+            ' ' +
+            status.substring(5) +
+            ', ';
       }
       if (status.startsWith('year')) {
-        result += status[0].toUpperCase() + status.substring(1, 4) + ' ' + status.substring(4) + ', ';
+        result += status[0].toUpperCase() +
+            status.substring(1, 4) +
+            ' ' +
+            status.substring(4) +
+            ', ';
       }
     });
     result = result.substring(0, result.length - 2);
     return result;
+  }
+
+  String _getMonth(int monthNumber) {
+    List<String> months = [
+      'January',
+      'February',
+      'March',
+      'April',
+      'May',
+      'June',
+      'July',
+      'August',
+      'September',
+      'October',
+      'November',
+      'December'
+    ];
+    return months[monthNumber - 1];
   }
 
   AppBar _buildAppBar(BuildContext context, String title, String activityId) {
@@ -132,7 +168,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
         IconButton(
           icon: Icon(
             Icons.favorite,
-            color: _isFavorite ? Colors.deepPurple : Colors.white,
+            color: _isFavorite ? Colors.lightBlueAccent : Colors.white,
           ),
           onPressed: () {
             setState(() {
@@ -159,15 +195,9 @@ class _ActivityScreenState extends State<ActivityScreen> {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text('Location : ${document['location']['name']}'),
-        ),
-        Padding(
-          padding: const EdgeInsets.all(8.0),
-          child: Text(
-              'Time : ${startDate.day}/${startDate.month}/${(startDate.year.toInt() + 543)} ${startDate.hour}:${startDate.minute < 10 ? '0' + startDate.minute.toString() : startDate.minute} - ${endDate.day}/${endDate.month}/${(endDate.year.toInt() + 543)} ${endDate.hour}:${endDate.minute < 10 ? '0' + endDate.minute.toString() : endDate.minute}'),
-        ),
+        _buildContentRow(Icons.map, 'Location', document['location']['name']),
+        _buildContentRow(Icons.access_time, 'Event Date/Time',
+            '${startDate.day} ${_getMonth(startDate.month)} ${(startDate.year.toInt() + 543)} ${startDate.hour}:${startDate.minute < 10 ? '0' + startDate.minute.toString() : startDate.minute} - ${endDate.day} ${_getMonth(endDate.month)} ${(endDate.year.toInt() + 543)} ${endDate.hour}:${endDate.minute < 10 ? '0' + endDate.minute.toString() : endDate.minute}'),
         SizedBox(
           child: MapHolder(
               targetName: document['location']['name'],
@@ -180,53 +210,18 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
-  Container _buildAboutContent(DateTime date, DocumentSnapshot document) {
+  Container _buildAboutContent(
+      DateTime startDate, DateTime endDate, DocumentSnapshot document) {
     return Container(
       child: Column(
         children: <Widget>[
-          Row(
-            children: <Widget>[
-              SizedBox(
-                width: 32,
-              ),
-              Icon(
-                Icons.access_time,
-                color: Theme.of(context).primaryColor,
-              ),
-              SizedBox(
-                width: 24,
-              ),
-              Column(
-                children: <Widget>[
-                  Text(
-                      'Last Register date : ${date.day} / ${date.month} / ${(date.year.toInt() + 543)}'),
-                  Text(
-                      'Time : ${date.hour}:${date.minute < 10 ? '0' + date.minute.toString() : date.minute}')
-                ],
-                crossAxisAlignment: CrossAxisAlignment.start,
-              )
-            ],
-          ),
+          _buildContentRow(Icons.access_time, 'Registration period',
+              '${startDate.day} ${_getMonth(startDate.month)} ${(startDate.year.toInt() + 543)} - ${endDate.day} ${_getMonth(endDate.month)} ${(endDate.year.toInt() + 543)}'),
+          _buildContentRow(Icons.person, 'Participant Status',
+              _generateAttendeeStatus(document["attendeeStatus"])),
+          Divider(),
           SizedBox(
-            height: 12,
-          ),
-          Row(
-            children: <Widget>[
-              SizedBox(
-                width: 32,
-              ),
-              Icon(
-                Icons.person,
-                color: Theme.of(context).primaryColor,
-              ),
-              SizedBox(
-                width: 24,
-              ),
-              Text(_generateAttendeeStatus(document["attendeeStatus"]))
-            ],
-          ),
-          SizedBox(
-            height: 72,
+            height: MediaQuery.of(context).size.height / 50,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -236,14 +231,20 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 child: Text(
                   document['price'] == 0
                       ? 'FREE'
-                      : document['price'].toString(),
+                      : document['price'].toString() + ' ฿',
                   style: TextStyle(
-                    color: Colors.yellow[800],
+                    color: document['price'] == 0
+                        ? Colors.green
+                        : Colors.grey[800],
                     fontSize: 24,
+                    fontWeight: document['price'] == 0
+                        ? FontWeight.bold
+                        : FontWeight.normal,
                   ),
                 ),
               ),
               InkWell(
+                borderRadius: BorderRadius.circular(16.0),
                 onTap: () {
                   setState(() {
                     _isRegistered = !_isRegistered;
@@ -251,8 +252,8 @@ class _ActivityScreenState extends State<ActivityScreen> {
                 },
                 child: Container(
                   child: Center(
-                    child: const Text(
-                      "REGISTER",
+                    child: Text(
+                      _isRegistered ? "REGISTERED" : "REGISTER",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
@@ -262,8 +263,10 @@ class _ActivityScreenState extends State<ActivityScreen> {
                   height: MediaQuery.of(context).size.height / 15,
                   width: MediaQuery.of(context).size.width / 2,
                   decoration: BoxDecoration(
-                    color: _isRegistered ? Colors.grey : Theme.of(context).primaryColor,
-                    borderRadius: BorderRadius.circular(15.00),
+                    color: _isRegistered
+                        ? Colors.grey
+                        : Theme.of(context).primaryColor,
+                    borderRadius: BorderRadius.circular(16.0),
                   ),
                 ),
               )
@@ -274,30 +277,66 @@ class _ActivityScreenState extends State<ActivityScreen> {
     );
   }
 
+  Column _buildContentRow(IconData icon, String title, String content) {
+    return Column(
+      children: <Widget>[
+        Row(
+          children: <Widget>[
+            SizedBox(
+              width: 32,
+            ),
+            Icon(
+              icon,
+              color: Theme.of(context).primaryColor,
+            ),
+            SizedBox(
+              width: 24,
+            ),
+            Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  title,
+                  style: TextStyle(fontSize: 12.0),
+                ),
+                SizedBox(
+                  height: 4,
+                ),
+                Text(
+                  '${content}',
+                  style: TextStyle(fontSize: 14.0),
+                ),
+              ],
+            ),
+          ],
+        ),
+        SizedBox(
+          height: 24,
+        ),
+      ],
+    );
+  }
+
   Row _buildDetailTabActive() {
     return Row(
       children: <Widget>[
-        Container(
-          height: 16.00,
-          width: 16.00,
-          decoration: BoxDecoration(
-            color: Colors.deepPurple,
-            shape: BoxShape.circle,
-          ),
+        const Icon(
+          Icons.assignment,
+          color: Colors.deepOrange,
         ),
-        SizedBox(
-          width: 5,
+        const SizedBox(
+          width: 8,
         ),
-        new Text(
+        const Text(
           'Detail',
           style: TextStyle(
-            fontSize: 15,
-            color: Colors.deepPurple,
-            decoration: TextDecoration.underline,
+            fontSize: 16,
+            color: Colors.deepOrange,
+            fontWeight: FontWeight.bold,
           ),
         ),
-        SizedBox(
-          width: 15,
+        const SizedBox(
+          width: 16,
         )
       ],
     );
@@ -306,9 +345,16 @@ class _ActivityScreenState extends State<ActivityScreen> {
   Row _buildDetailTabInactive() {
     return Row(
       children: <Widget>[
+        const Icon(
+          Icons.assignment,
+          color: Colors.black87,
+        ),
+        SizedBox(
+          width: 8,
+        ),
         InkWell(
           child: Container(
-            child: Text('Detail'),
+            child: const Text('Detail'),
           ),
           onTap: () {
             setState(() {
@@ -317,7 +363,7 @@ class _ActivityScreenState extends State<ActivityScreen> {
           },
         ),
         SizedBox(
-          width: 25,
+          width: 24,
         )
       ],
     );
@@ -327,7 +373,14 @@ class _ActivityScreenState extends State<ActivityScreen> {
     return Row(
       children: <Widget>[
         SizedBox(
-          width: 20,
+          width: 16,
+        ),
+        Icon(
+          Icons.info,
+          color: Colors.black87,
+        ),
+        SizedBox(
+          width: 8,
         ),
         InkWell(
           child: Container(
@@ -347,25 +400,21 @@ class _ActivityScreenState extends State<ActivityScreen> {
     return Row(
       children: <Widget>[
         SizedBox(
-          width: 15,
+          width: 16,
         ),
-        Container(
-          height: 16.00,
-          width: 16.00,
-          decoration: BoxDecoration(
-            color: Colors.deepPurple,
-            shape: BoxShape.circle,
-          ),
+        Icon(
+          Icons.info,
+          color: Colors.deepOrange,
         ),
         SizedBox(
-          width: 5,
+          width: 8,
         ),
         new Text(
           'About',
           style: TextStyle(
-            fontSize: 15,
-            color: Colors.deepPurple,
-            decoration: TextDecoration.underline,
+            fontSize: 16,
+            color: Colors.deepOrange,
+            fontWeight: FontWeight.bold,
           ),
         )
       ],

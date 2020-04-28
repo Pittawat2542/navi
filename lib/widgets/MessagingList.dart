@@ -48,19 +48,41 @@ class _MessagingListState extends State<MessagingList> {
       appBar: AppBar(
         title: Text("Notifications"),
       ),
-      body: ListView(
-        children: messages.map(buildMessage).toList(),
-      ),
+      body: messages.length == 0
+          ? Center(
+            child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                crossAxisAlignment: CrossAxisAlignment.center,
+                children: <Widget>[
+                  const Icon(
+                    Icons.notifications_off,
+                    size: 64.0,
+                  ),
+                  const SizedBox(
+                    height: 16.0,
+                  ),
+                  const Text(
+                    "No notifications",
+                    style: TextStyle(
+                      fontSize: 24.0,
+                    ),
+                  ),
+                ],
+              ),
+          )
+          : ListView(
+              children: messages.map(buildMessage).toList(),
+            ),
     );
   }
 
   Widget buildMessage(Message message) => Column(
-    children: <Widget>[
-      ListTile(
-        title: Text(message.title),
-        subtitle: Text(message.body),
-      ),
-      Divider()
-    ],
-  );
+        children: <Widget>[
+          ListTile(
+            title: Text(message.title),
+            subtitle: Text(message.body),
+          ),
+          Divider()
+        ],
+      );
 }

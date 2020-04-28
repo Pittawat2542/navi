@@ -1,6 +1,5 @@
-import 'package:Navi/screens/PlaceholderScreen.dart';
 import 'package:flutter/material.dart';
-import 'package:Navi/screens/ActivityScreen.dart';
+import 'package:Navi/screens/ActivityDetailScreen.dart';
 
 class ActivityCard extends StatelessWidget {
   final String id;
@@ -22,20 +21,24 @@ class ActivityCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return InkWell(
-      onTap: () {
-        !this.isActivityDetail
-            ? Navigator.push(
-                context,
-                MaterialPageRoute(
-                    builder: (context) =>
-                        ActivityScreen(id, title, category.toString())))
-            : () {};
-      },
-      child: Container(
-        margin: EdgeInsets.only(
-          bottom: 16.0,
+    return Container(
+      margin: EdgeInsets.only(
+        bottom: 16.0,
+      ),
+      child: InkWell(
+        borderRadius: BorderRadius.only(
+          topRight: Radius.circular(30.0),
+          bottomLeft: Radius.circular(30.0),
         ),
+        onTap: () {
+          !this.isActivityDetail
+              ? Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) =>
+                          ActivityDetailScreen(id, title, category.toString())))
+              : () {};
+        },
         child: ClipRRect(
           borderRadius: BorderRadius.only(
             topRight: Radius.circular(30.0),
