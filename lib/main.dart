@@ -16,7 +16,13 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Navi',
       theme: ThemeData(
-        primarySwatch: Colors.deepOrange,
+        primaryColor: Colors.deepOrange,
+        textTheme: TextTheme(
+
+        )
+      ),
+      darkTheme: ThemeData(
+        primaryColor: Colors.deepOrange
       ),
       home: MyHomePage(title: 'Navi'),
     );
@@ -53,13 +59,7 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
           title: Text(widget.title),
           bottom: TabBar(
-//            indicator: BoxDecoration(
-//              color: Colors.white,
-//              borderRadius: BorderRadius.circular(30.0),
-//            ),
-            labelColor: Colors.lightBlueAccent,
-            indicatorColor: Colors.lightBlueAccent,
-            unselectedLabelColor: Colors.white,
+            indicatorColor: Colors.white,
             tabs: tabBar
                 .map(
                   (tab) => Tab(
@@ -80,16 +80,18 @@ class _MyHomePageState extends State<MyHomePage> {
         ),
         floatingActionButtonLocation: FloatingActionButtonLocation.centerDocked,
         floatingActionButton: FloatingActionButton(
+          backgroundColor: Theme.of(context).primaryColor,
           onPressed: () =>
               showSearch(context: context, delegate: AppSearchDelegate()),
           tooltip: 'Search',
           child: Icon(Icons.search),
-          elevation: 2.0,
+          elevation: 4.0,
         ),
         bottomNavigationBar: HomeBottomNavigationBar(
+          notchedShape: CircularNotchedRectangle(),
           items: [
             HomeBottomNavigationBarItem(
-                icon: Icons.bookmark,
+                icon: Icons.favorite,
                 text: 'Favorites',
                 action: () => Navigator.of(context).push(
                     MaterialPageRoute(builder: (context) => FavoriteScreen()))),

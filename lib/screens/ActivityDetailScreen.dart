@@ -88,11 +88,11 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: <Widget>[
                             _isAboutOrDetail
-                                ? _buildAboutTabActive()
+                                ? _buildAboutTabActive(context)
                                 : _buildAboutTabInactive(),
                             _isAboutOrDetail
                                 ? _buildDetailTabInactive()
-                                : _buildDetailTabActive()
+                                : _buildDetailTabActive(context)
                           ],
                         ),
                         SizedBox(
@@ -167,8 +167,8 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
       actions: <Widget>[
         IconButton(
           icon: Icon(
-            Icons.favorite,
-            color: _isFavorite ? Colors.lightBlueAccent : Colors.white,
+            _isFavorite ? Icons.favorite : Icons.favorite_border,
+            color:Colors.white,
           ),
           onPressed: () {
             setState(() {
@@ -303,7 +303,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                   height: 4,
                 ),
                 Text(
-                  '${content}',
+                  content,
                   style: TextStyle(fontSize: 14.0),
                 ),
               ],
@@ -317,21 +317,21 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
     );
   }
 
-  Row _buildDetailTabActive() {
+  Row _buildDetailTabActive(BuildContext context) {
     return Row(
       children: <Widget>[
-        const Icon(
+        Icon(
           Icons.assignment,
-          color: Colors.deepOrange,
+          color: Theme.of(context).primaryColor,
         ),
         const SizedBox(
           width: 8,
         ),
-        const Text(
+        Text(
           'Detail',
           style: TextStyle(
             fontSize: 16,
-            color: Colors.deepOrange,
+            color: Theme.of(context).primaryColor,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -349,7 +349,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
           Icons.assignment,
           color: Colors.black87,
         ),
-        SizedBox(
+        const SizedBox(
           width: 8,
         ),
         InkWell(
@@ -362,7 +362,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
             });
           },
         ),
-        SizedBox(
+        const SizedBox(
           width: 24,
         )
       ],
@@ -372,19 +372,19 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
   Row _buildAboutTabInactive() {
     return Row(
       children: <Widget>[
-        SizedBox(
+        const SizedBox(
           width: 16,
         ),
-        Icon(
+        const Icon(
           Icons.info,
           color: Colors.black87,
         ),
-        SizedBox(
+        const SizedBox(
           width: 8,
         ),
         InkWell(
           child: Container(
-            child: Text('About'),
+            child: const Text('About'),
           ),
           onTap: () {
             setState(() {
@@ -396,24 +396,24 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
     );
   }
 
-  Row _buildAboutTabActive() {
+  Row _buildAboutTabActive(BuildContext context) {
     return Row(
       children: <Widget>[
-        SizedBox(
+        const SizedBox(
           width: 16,
         ),
         Icon(
           Icons.info,
-          color: Colors.deepOrange,
+          color: Theme.of(context).primaryColor,
         ),
-        SizedBox(
+        const SizedBox(
           width: 8,
         ),
         new Text(
           'About',
           style: TextStyle(
             fontSize: 16,
-            color: Colors.deepOrange,
+            color: Theme.of(context).primaryColor,
             fontWeight: FontWeight.bold,
           ),
         )

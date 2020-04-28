@@ -71,6 +71,7 @@ class HomeBottomNavigationBarState extends State<HomeBottomNavigationBar> {
       child: SizedBox(
         height: widget.height,
         child: Material(
+          color: Colors.transparent,
           child: InkWell(
             onTap: () => {
               setState(() => {_selectedIndex = index}),

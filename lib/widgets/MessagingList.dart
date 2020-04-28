@@ -50,9 +50,8 @@ class _MessagingListState extends State<MessagingList> {
       ),
       body: messages.length == 0
           ? Center(
-            child: Column(
+              child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
-                crossAxisAlignment: CrossAxisAlignment.center,
                 children: <Widget>[
                   const Icon(
                     Icons.notifications_off,
@@ -62,14 +61,20 @@ class _MessagingListState extends State<MessagingList> {
                     height: 16.0,
                   ),
                   const Text(
-                    "No notifications",
+                    'No notifications',
                     style: TextStyle(
                       fontSize: 24.0,
+                      fontWeight: FontWeight.bold,
                     ),
                   ),
+                  const SizedBox(
+                    height: 8.0,
+                  ),
+                  const Text(
+                      'Notifications will appear while using application.')
                 ],
               ),
-          )
+            )
           : ListView(
               children: messages.map(buildMessage).toList(),
             ),
