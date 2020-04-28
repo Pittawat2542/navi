@@ -1,0 +1,47 @@
+{
+  "project_info": {
+    "project_number": "366094836049",
+    "firebase_url": "https://navi-lx.firebaseio.com",
+    "project_id": "navi-lx",
+    "storage_bucket": "navi-lx.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:366094836049:android:6159c5c2f342ca72f3f370",
+        "android_client_info": {
+          "package_name": "com.kmuttlx.navi"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "366094836049-r4f0o884kk8kd528iqflrkg3k5p5l04i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCnrlbRegmmDaAFIBBepLKYm6hspe4IUCM"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "366094836049-r4f0o884kk8kd528iqflrkg3k5p5l04i.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "366094836049-148jdr8r4a77of1t40otfqqq7s2fjiv8.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "com.kmuttlx.navi"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
