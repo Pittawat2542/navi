@@ -76,13 +76,13 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                             id: document.documentID,
                             title: document["title"],
                             imageUrl: document["imageUrl"],
-                            height: 228,
+                            height: MediaQuery.of(context).size.height / 4,
                             isActivityDetail: true,
-                            category: 'activity',
+                            category: widget.category,
                           ),
                         ),
                         SizedBox(
-                          height: 25,
+                          height: 24,
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -96,7 +96,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                           ],
                         ),
                         SizedBox(
-                          height: 30,
+                          height: 32,
                         ),
                         _isAboutOrDetail
                             ? _buildAboutContent(registrationStartDateTime,
@@ -168,7 +168,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
         IconButton(
           icon: Icon(
             _isFavorite ? Icons.favorite : Icons.favorite_border,
-            color:Colors.white,
+            color: Colors.white,
           ),
           onPressed: () {
             setState(() {
@@ -319,6 +319,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
 
   Row _buildDetailTabActive(BuildContext context) {
     return Row(
+      mainAxisAlignment: MainAxisAlignment.end,
       children: <Widget>[
         Icon(
           Icons.assignment,
@@ -342,63 +343,72 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
     );
   }
 
-  Row _buildDetailTabInactive() {
-    return Row(
-      children: <Widget>[
-        const Icon(
-          Icons.assignment,
-          color: Colors.black87,
+  InkWell _buildDetailTabInactive() {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _isAboutOrDetail = !_isAboutOrDetail;
+        });
+      },
+      child: Container(
+        color: Colors.transparent,
+        width: 100,
+        child: Row(
+          mainAxisAlignment: MainAxisAlignment.end,
+          children: <Widget>[
+            const Icon(
+              Icons.assignment,
+              color: Colors.black87,
+            ),
+            const SizedBox(
+              width: 8,
+            ),Container(
+              child: const Text('Detail'),
+            ),
+            const SizedBox(
+              width: 24,
+            )
+          ],
         ),
-        const SizedBox(
-          width: 8,
-        ),
-        InkWell(
-          child: Container(
-            child: const Text('Detail'),
-          ),
-          onTap: () {
-            setState(() {
-              _isAboutOrDetail = !_isAboutOrDetail;
-            });
-          },
-        ),
-        const SizedBox(
-          width: 24,
-        )
-      ],
+      ),
     );
   }
 
-  Row _buildAboutTabInactive() {
-    return Row(
-      children: <Widget>[
-        const SizedBox(
-          width: 16,
+  InkWell _buildAboutTabInactive() {
+    return InkWell(
+      onTap: () {
+        setState(() {
+          _isAboutOrDetail = !_isAboutOrDetail;
+        });
+      },
+      child: Container(
+        color: Colors.transparent,
+        width: 100,
+        child: Row(
+          children: [
+            const SizedBox(
+              width: 16,
+            ),
+            const Icon(
+              Icons.info,
+              color: Colors.black87,
+            ),
+            const SizedBox(
+              width: 8,
+            ),
+            Container(
+              child: const Text('About'),
+            ),
+          ],
         ),
-        const Icon(
-          Icons.info,
-          color: Colors.black87,
-        ),
-        const SizedBox(
-          width: 8,
-        ),
-        InkWell(
-          child: Container(
-            child: const Text('About'),
-          ),
-          onTap: () {
-            setState(() {
-              _isAboutOrDetail = !_isAboutOrDetail;
-            });
-          },
-        ),
-      ],
+      ),
     );
   }
 
   Row _buildAboutTabActive(BuildContext context) {
     return Row(
-      children: <Widget>[
+      mainAxisAlignment: MainAxisAlignment.start,
+      children: [
         const SizedBox(
           width: 16,
         ),
