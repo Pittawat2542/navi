@@ -45,7 +45,7 @@ class MapState extends State<Map> {
       mapType: MapType.normal,
       initialCameraPosition: CameraPosition(
           target: targetLocation,
-          zoom: 17
+          zoom: 18
       ),
       rotateGesturesEnabled: false,
       scrollGesturesEnabled: false,
