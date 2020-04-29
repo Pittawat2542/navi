@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share/share.dart';
 import 'package:localstorage/localstorage.dart';
+import 'package:url_launcher/url_launcher.dart';
 
 import 'package:Navi/widgets/ActivityCard.dart';
 import 'package:Navi/widgets/MapHolder.dart';
@@ -23,7 +24,6 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
 
   bool _isFavorite = false;
   bool _isAboutOrDetail = true;
-  bool _isRegistered = false;
 
   @override
   Widget build(BuildContext context) {
@@ -245,15 +245,17 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
               ),
               InkWell(
                 borderRadius: BorderRadius.circular(16.0),
-                onTap: () {
-                  setState(() {
-                    _isRegistered = !_isRegistered;
-                  });
+                onTap: () async {
+                  if (await canLaunch(document["websiteUrl"])) {
+                    await launch(document["websiteUrl"]);
+                  } else {
+                    throw 'Could not launch $document["websiteUrl"]';
+                  }
                 },
                 child: Container(
                   child: Center(
-                    child: Text(
-                      _isRegistered ? "REGISTERED" : "REGISTER",
+                    child: const Text(
+                      "JOIN",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
@@ -263,9 +265,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                   height: MediaQuery.of(context).size.height / 15,
                   width: MediaQuery.of(context).size.width / 2,
                   decoration: BoxDecoration(
-                    color: _isRegistered
-                        ? Colors.grey
-                        : Theme.of(context).primaryColor,
+                    color: Theme.of(context).primaryColor,
                     borderRadius: BorderRadius.circular(16.0),
                   ),
                 ),
