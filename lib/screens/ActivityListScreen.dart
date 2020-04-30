@@ -26,12 +26,8 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
     return Padding(
       padding: const EdgeInsets.all(16.0),
       child: StreamBuilder<QuerySnapshot>(
-        stream: Firestore.instance
-            .collection('news')
-            .orderBy('title')
-            .where('title', isGreaterThanOrEqualTo: widget.query)
-            .where('title', isLessThanOrEqualTo: widget.query + '\uF7FF')
-            .snapshots(),
+        stream:
+            Firestore.instance.collection('news').orderBy('title').snapshots(),
         builder: (BuildContext context, AsyncSnapshot<QuerySnapshot> snapshot) {
           if (snapshot.hasError) return Text('Error: ${snapshot.error}');
           switch (snapshot.connectionState) {
@@ -44,9 +40,6 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
                 stream: Firestore.instance
                     .collection('activity')
                     .orderBy('title')
-                    .where('title', isGreaterThanOrEqualTo: widget.query)
-                    .where('title',
-                        isLessThanOrEqualTo: widget.query + '\uF7FF')
                     .snapshots(),
                 builder: (BuildContext context,
                     AsyncSnapshot<QuerySnapshot> snapshot1) {
@@ -62,10 +55,6 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
                         stream: Firestore.instance
                             .collection('competition')
                             .orderBy('title')
-                            .where('title',
-                                isGreaterThanOrEqualTo: widget.query)
-                            .where('title',
-                                isLessThanOrEqualTo: widget.query + '\uF7FF')
                             .snapshots(),
                         builder: (BuildContext context,
                             AsyncSnapshot<QuerySnapshot> snapshot2) {
@@ -110,17 +99,35 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
                                   : ListView(
                                       children: [
                                         ...snapshot.data.documents
-                                            .map((DocumentSnapshot document) {
+                                            .where((DocumentSnapshot doc) {
+                                          return doc['title']
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(
+                                                  widget.query.toLowerCase());
+                                        }).map((DocumentSnapshot document) {
                                           return _buildActivityCard(
                                               document, 'news');
                                         }).toList(),
                                         ...snapshot1.data.documents
-                                            .map((DocumentSnapshot document) {
+                                            .where((DocumentSnapshot doc) {
+                                          return doc['title']
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(
+                                                  widget.query.toLowerCase());
+                                        }).map((DocumentSnapshot document) {
                                           return _buildActivityCard(
                                               document, 'activity');
                                         }).toList(),
                                         ...snapshot2.data.documents
-                                            .map((DocumentSnapshot document) {
+                                            .where((DocumentSnapshot doc) {
+                                          return doc['title']
+                                              .toString()
+                                              .toLowerCase()
+                                              .contains(
+                                                  widget.query.toLowerCase());
+                                        }).map((DocumentSnapshot document) {
                                           return _buildActivityCard(
                                               document, 'competition');
                                         }).toList()
