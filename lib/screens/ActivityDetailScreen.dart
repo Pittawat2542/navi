@@ -70,16 +70,13 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                             document['activityEndDateTime'].seconds * 1000);
                     return Column(
                       children: [
-                        Hero(
-                          tag: document.documentID.toString(),
-                          child: ActivityCard(
-                            id: document.documentID,
-                            title: document["title"],
-                            imageUrl: document["imageUrl"],
-                            height: MediaQuery.of(context).size.height / 4,
-                            isActivityDetail: true,
-                            category: widget.category,
-                          ),
+                        ActivityCard(
+                          id: document.documentID,
+                          title: document["title"],
+                          imageUrl: document["imageUrl"],
+                          height: MediaQuery.of(context).size.height / 4,
+                          isActivityDetail: true,
+                          category: widget.category,
                         ),
                         SizedBox(
                           height: 24,
