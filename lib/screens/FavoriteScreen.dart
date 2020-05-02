@@ -75,15 +75,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                       )
                                       .map(
                                         (DocumentSnapshot doc) {
-                                          return Hero(
-                                            tag: doc.documentID.toString(),
-                                            child: ActivityCard(
-                                              id: doc.documentID,
-                                              title: doc['title'],
-                                              imageUrl: doc['imageUrl'],
-                                              category: 'news',
-                                              isFavoriteCard: true,
-                                            ),
+                                          return ActivityCard(
+                                            id: doc.documentID,
+                                            title: doc['title'],
+                                            imageUrl: doc['imageUrl'],
+                                            category: 'news',
+                                            isFavoriteCard: true,
                                           );
                                         },
                                       )
@@ -103,15 +100,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                       )
                                       .map(
                                         (DocumentSnapshot doc) {
-                                          return Hero(
-                                            tag: doc.documentID.toString(),
-                                            child: ActivityCard(
-                                              id: doc.documentID,
-                                              title: doc['title'],
-                                              imageUrl: doc['imageUrl'],
-                                              category: 'activity',
-                                              isFavoriteCard: true,
-                                            ),
+                                          return ActivityCard(
+                                            id: doc.documentID,
+                                            title: doc['title'],
+                                            imageUrl: doc['imageUrl'],
+                                            category: 'activity',
+                                            isFavoriteCard: true,
                                           );
                                         },
                                       )
@@ -131,15 +125,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                       )
                                       .map(
                                         (DocumentSnapshot doc) {
-                                          return Hero(
-                                            tag: doc.documentID.toString(),
-                                            child: ActivityCard(
-                                              id: doc.documentID,
-                                              title: doc['title'],
-                                              imageUrl: doc['imageUrl'],
-                                              category: 'competition',
-                                              isFavoriteCard: true,
-                                            ),
+                                          return ActivityCard(
+                                            id: doc.documentID,
+                                            title: doc['title'],
+                                            imageUrl: doc['imageUrl'],
+                                            category: 'competition',
+                                            isFavoriteCard: true,
                                           );
                                         },
                                       )
@@ -189,15 +180,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                           },
                                         ).map(
                                           (DocumentSnapshot doc) {
-                                            return Hero(
-                                              tag: doc.documentID.toString(),
-                                              child: ActivityCard(
-                                                id: doc.documentID,
-                                                title: doc['title'],
-                                                imageUrl: doc['imageUrl'],
-                                                category: 'news',
-                                                isFavoriteCard: true,
-                                              ),
+                                            return ActivityCard(
+                                              id: doc.documentID,
+                                              title: doc['title'],
+                                              imageUrl: doc['imageUrl'],
+                                              category: 'news',
+                                              isFavoriteCard: true,
                                             );
                                           },
                                         ).toList(),
@@ -213,15 +201,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                           },
                                         ).map(
                                           (DocumentSnapshot doc) {
-                                            return Hero(
-                                              tag: doc.documentID.toString(),
-                                              child: ActivityCard(
-                                                id: doc.documentID,
-                                                title: doc['title'],
-                                                imageUrl: doc['imageUrl'],
-                                                category: 'activity',
-                                                isFavoriteCard: true,
-                                              ),
+                                            return ActivityCard(
+                                              id: doc.documentID,
+                                              title: doc['title'],
+                                              imageUrl: doc['imageUrl'],
+                                              category: 'activity',
+                                              isFavoriteCard: true,
                                             );
                                           },
                                         ).toList(),
@@ -237,15 +222,12 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                           },
                                         ).map(
                                           (DocumentSnapshot doc) {
-                                            return Hero(
-                                              tag: doc.documentID.toString(),
-                                              child: ActivityCard(
-                                                id: doc.documentID,
-                                                title: doc['title'],
-                                                imageUrl: doc['imageUrl'],
-                                                category: 'competition',
-                                                isFavoriteCard: true,
-                                              ),
+                                            return ActivityCard(
+                                              id: doc.documentID,
+                                              title: doc['title'],
+                                              imageUrl: doc['imageUrl'],
+                                              category: 'competition',
+                                              isFavoriteCard: true,
                                             );
                                           },
                                         ).toList()
