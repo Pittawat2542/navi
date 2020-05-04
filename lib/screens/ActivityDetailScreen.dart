@@ -273,7 +273,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                 child: Container(
                   child: Center(
                     child: Text(
-                      widget.category == 'news' ? 'More info' : "JOIN",
+                      widget.category == 'news' ? 'MORE INFO' : "JOIN",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
