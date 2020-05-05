@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:share/share.dart';
 import 'package:localstorage/localstorage.dart';
 import 'package:url_launcher/url_launcher.dart';
+import 'package:translator/translator.dart';
 
 import 'package:Navi/widgets/ActivityCard.dart';
 import 'package:Navi/widgets/MapHolder.dart';
@@ -21,6 +22,7 @@ class ActivityDetailScreen extends StatefulWidget {
 
 class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
   final LocalStorage _storage = new LocalStorage('favorites');
+  final translator = GoogleTranslator();
 
   bool _isFavorite = false;
   bool _isAboutOrDetail = true;
@@ -28,7 +30,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
   @override
   Widget build(BuildContext context) {
     bool isFavoriteStorage =
-        _storage.getItem(widget.activityId) == 'true' ? true : false;
+    _storage.getItem(widget.activityId) == 'true' ? true : false;
     _isFavorite = isFavoriteStorage;
 
     if (widget.activityId != null) {
@@ -56,30 +58,30 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
 
                     DocumentSnapshot document = snapshot.data;
                     DateTime registrationStartDateTime =
-                        new DateTime.fromMillisecondsSinceEpoch(
-                            document['registrationStartDateTime'].seconds *
-                                1000);
+                    new DateTime.fromMillisecondsSinceEpoch(
+                        document['registrationStartDateTime'].seconds *
+                            1000);
                     DateTime registrationEndDateTime =
-                        new DateTime.fromMillisecondsSinceEpoch(
-                            document['registrationEndDateTime'].seconds * 1000);
+                    new DateTime.fromMillisecondsSinceEpoch(
+                        document['registrationEndDateTime'].seconds * 1000);
                     DateTime eventStartDateTime =
-                        new DateTime.fromMillisecondsSinceEpoch(
-                            document['activityStartDateTime'].seconds * 1000);
+                    new DateTime.fromMillisecondsSinceEpoch(
+                        document['activityStartDateTime'].seconds * 1000);
                     DateTime eventEndDateTime =
-                        new DateTime.fromMillisecondsSinceEpoch(
-                            document['activityEndDateTime'].seconds * 1000);
+                    new DateTime.fromMillisecondsSinceEpoch(
+                        document['activityEndDateTime'].seconds * 1000);
                     return Column(
                       children: [
-                        Hero(
-                          tag: document.documentID.toString(),
-                          child: ActivityCard(
-                            id: document.documentID,
-                            title: document["title"],
-                            imageUrl: document["imageUrl"],
-                            height: MediaQuery.of(context).size.height / 4,
-                            isActivityDetail: true,
-                            category: widget.category,
-                          ),
+                        ActivityCard(
+                          id: document.documentID,
+                          title: document["title"],
+                          imageUrl: document["imageUrl"],
+                          height: MediaQuery
+                              .of(context)
+                              .size
+                              .height / 4,
+                          isActivityDetail: true,
+                          category: widget.category,
                         ),
                         SizedBox(
                           height: 24,
@@ -99,10 +101,10 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                           height: 32,
                         ),
                         _isAboutOrDetail
-                            ? _buildAboutContent(registrationStartDateTime,
-                                registrationEndDateTime, document)
+                            ? _buildAboutContent(eventStartDateTime,
+                            eventEndDateTime, document)
                             : _buildDetailContent(
-                                eventStartDateTime, eventEndDateTime, document)
+                            registrationStartDateTime, registrationEndDateTime, document)
                       ],
                     );
                   },
@@ -190,14 +192,21 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
     );
   }
 
-  Column _buildDetailContent(
-      DateTime startDate, DateTime endDate, DocumentSnapshot document) {
+  Column _buildDetailContent(DateTime startDate, DateTime endDate,
+      DocumentSnapshot document) {
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: <Widget>[
         _buildContentRow(Icons.map, 'Location', document['location']['name']),
-        _buildContentRow(Icons.access_time, 'Event Date/Time',
-            '${startDate.day} ${_getMonth(startDate.month)} ${(startDate.year.toInt() + 543)} ${startDate.hour}:${startDate.minute < 10 ? '0' + startDate.minute.toString() : startDate.minute} - ${endDate.day} ${_getMonth(endDate.month)} ${(endDate.year.toInt() + 543)} ${endDate.hour}:${endDate.minute < 10 ? '0' + endDate.minute.toString() : endDate.minute}'),
+        _buildContentRow(Icons.access_time, 'Registration period',
+            '${startDate.day} ${_getMonth(startDate.month)} ${(startDate.year
+                .toInt() + 543)} ${startDate.hour}:${startDate.minute < 10
+                ? '0' + startDate.minute.toString()
+                : startDate.minute} - ${endDate.day} ${_getMonth(
+                endDate.month)} ${(endDate.year.toInt() + 543)} ${endDate
+                .hour}:${endDate.minute < 10
+                ? '0' + endDate.minute.toString()
+                : endDate.minute}'),
         SizedBox(
           child: MapHolder(
               targetName: document['location']['name'],
@@ -206,22 +215,31 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
               doc: document),
           height: 200,
         ),
+        SizedBox(
+          height: 24,
+        ),
+        _buildContentRow(Icons.description, 'Description', document['description']),
       ],
     );
   }
 
-  Container _buildAboutContent(
-      DateTime startDate, DateTime endDate, DocumentSnapshot document) {
+  Container _buildAboutContent(DateTime startDate, DateTime endDate,
+      DocumentSnapshot document) {
     return Container(
       child: Column(
         children: <Widget>[
-          _buildContentRow(Icons.access_time, 'Registration period',
-              '${startDate.day} ${_getMonth(startDate.month)} ${(startDate.year.toInt() + 543)} - ${endDate.day} ${_getMonth(endDate.month)} ${(endDate.year.toInt() + 543)}'),
+          _buildContentRow(Icons.access_time, 'Event Date/Time',
+              '${startDate.day} ${_getMonth(startDate.month)} ${(startDate.year
+                  .toInt() + 543)} - ${endDate.day} ${_getMonth(
+                  endDate.month)} ${(endDate.year.toInt() + 543)}'),
           _buildContentRow(Icons.person, 'Participant Status',
               _generateAttendeeStatus(document["attendeeStatus"])),
           Divider(),
           SizedBox(
-            height: MediaQuery.of(context).size.height / 50,
+            height: MediaQuery
+                .of(context)
+                .size
+                .height / 50,
           ),
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -254,18 +272,26 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                 },
                 child: Container(
                   child: Center(
-                    child: const Text(
-                      "JOIN",
+                    child: Text(
+                      widget.category == 'news' ? 'MORE INFO' : "JOIN",
                       style: TextStyle(
                         fontSize: 20,
                         color: Colors.white,
                       ),
                     ),
                   ),
-                  height: MediaQuery.of(context).size.height / 15,
-                  width: MediaQuery.of(context).size.width / 2,
+                  height: MediaQuery
+                      .of(context)
+                      .size
+                      .height / 15,
+                  width: MediaQuery
+                      .of(context)
+                      .size
+                      .width / 2,
                   decoration: BoxDecoration(
-                    color: Theme.of(context).primaryColor,
+                    color: Theme
+                        .of(context)
+                        .primaryColor,
                     borderRadius: BorderRadius.circular(16.0),
                   ),
                 ),
@@ -281,13 +307,16 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
     return Column(
       children: <Widget>[
         Row(
+          crossAxisAlignment: CrossAxisAlignment.start,
           children: <Widget>[
             SizedBox(
               width: 32,
             ),
             Icon(
               icon,
-              color: Theme.of(context).primaryColor,
+              color: Theme
+                  .of(context)
+                  .primaryColor,
             ),
             SizedBox(
               width: 24,
@@ -302,9 +331,27 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                 SizedBox(
                   height: 4,
                 ),
-                Text(
-                  content,
-                  style: TextStyle(fontSize: 14.0),
+                FutureBuilder(
+                  future: translator.translate( content,from: 'th',to: 'en'),
+                  builder: (BuildContext context, AsyncSnapshot<String> snapshot){
+                    if(snapshot.hasData){
+                      return  SizedBox(
+                        width: MediaQuery.of(context).size.width*0.67,
+                        child: Text(
+                          snapshot.data,
+                          style: TextStyle(fontSize: 14.0),
+                        ),
+                      );
+                    } else {
+                      return SizedBox(
+                        width: MediaQuery.of(context).size.width*0.67,
+                        child: Text(
+                          content,
+                          style: TextStyle(fontSize: 14.0),
+                        ),
+                      );
+                    }
+                  },
                 ),
               ],
             ),
@@ -323,7 +370,9 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
       children: <Widget>[
         Icon(
           Icons.assignment,
-          color: Theme.of(context).primaryColor,
+          color: Theme
+              .of(context)
+              .primaryColor,
         ),
         const SizedBox(
           width: 8,
@@ -332,7 +381,9 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
           'Detail',
           style: TextStyle(
             fontSize: 16,
-            color: Theme.of(context).primaryColor,
+            color: Theme
+                .of(context)
+                .primaryColor,
             fontWeight: FontWeight.bold,
           ),
         ),
@@ -362,7 +413,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
             ),
             const SizedBox(
               width: 8,
-            ),Container(
+            ), Container(
               child: const Text('Detail'),
             ),
             const SizedBox(
@@ -414,7 +465,9 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
         ),
         Icon(
           Icons.info,
-          color: Theme.of(context).primaryColor,
+          color: Theme
+              .of(context)
+              .primaryColor,
         ),
         const SizedBox(
           width: 8,
@@ -423,7 +476,9 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
           'About',
           style: TextStyle(
             fontSize: 16,
-            color: Theme.of(context).primaryColor,
+            color: Theme
+                .of(context)
+                .primaryColor,
             fontWeight: FontWeight.bold,
           ),
         )

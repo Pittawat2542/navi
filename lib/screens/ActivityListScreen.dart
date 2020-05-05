@@ -170,15 +170,12 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
     );
   }
 
-  Hero _buildActivityCard(DocumentSnapshot document, String category) {
-    return Hero(
-      tag: document.documentID.toString(),
-      child: ActivityCard(
-        id: document.documentID,
-        title: document["title"],
-        imageUrl: document["imageUrl"],
-        category: category,
-      ),
+  ActivityCard _buildActivityCard(DocumentSnapshot document, String category) {
+    return ActivityCard(
+      id: document.documentID,
+      title: document["title"],
+      imageUrl: document["imageUrl"],
+      category: category,
     );
   }
 }
