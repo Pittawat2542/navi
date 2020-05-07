@@ -10,7 +10,7 @@ class SettingsScreen extends StatelessWidget {
       body: Center(
         child: Container(
           color: Colors.white,
-          child: Text("Version 1.1.5"),
+          child: Text("Version 1.1.6"),
         ),
       ),
     );
