@@ -1,6 +1,7 @@
 import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:Navi/models/Message.dart';
+import 'package:localstorage/localstorage.dart';
 
 class MessagingList extends StatefulWidget {
   @override
@@ -8,6 +9,7 @@ class MessagingList extends StatefulWidget {
 }
 
 class _MessagingListState extends State<MessagingList> {
+  final LocalStorage _storage = new LocalStorage('notifications');
   final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
   final List<Message> messages = [];
 
@@ -19,8 +21,10 @@ class _MessagingListState extends State<MessagingList> {
         print("onMessage: $message");
         final notification = message['notification'];
         setState(() {
-          messages.add(Message(
+          _storage.setItem('notifications', Message(
               title: notification['title'], body: notification['body']));
+//          messages.add(Message(
+//              title: notification['title'], body: notification['body']));
         });
       },
       onLaunch: (Map<String, dynamic> message) async {
@@ -28,10 +32,12 @@ class _MessagingListState extends State<MessagingList> {
 
         final notification = message['data'];
         setState(() {
-          messages.add(Message(
-            title: '${notification['title']}',
-            body: '${notification['body']}',
-          ));
+          _storage.setItem('notifications', Message(
+              title: notification['title'], body: notification['body']));
+//          messages.add(Message(
+//            title: '${notification['title']}',
+//            body: '${notification['body']}',
+//          ));
         });
       },
       onResume: (Map<String, dynamic> message) async {
@@ -48,7 +54,7 @@ class _MessagingListState extends State<MessagingList> {
       appBar: AppBar(
         title: Text("Notifications"),
       ),
-      body: messages.length == 0
+      body: _storage.getItem('notifications') == null
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -76,10 +82,11 @@ class _MessagingListState extends State<MessagingList> {
               ),
             )
           : ListView(
-              children: messages.map(buildMessage).toList(),
+              children: _storage.getItem('notifications').map(buildMessage).toList(),
             ),
     );
   }
+
 
   Widget buildMessage(Message message) => Column(
         children: <Widget>[
