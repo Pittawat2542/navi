@@ -1,52 +1,17 @@
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:Navi/models/Message.dart';
 import 'package:localstorage/localstorage.dart';
 
 class MessagingList extends StatefulWidget {
+  final List<MessageNotification> messages;
+  MessagingList(this.messages);
   @override
-  _MessagingListState createState() => _MessagingListState();
+  _MessagingListState createState() => _MessagingListState(this.messages);
 }
 
 class _MessagingListState extends State<MessagingList> {
-  final LocalStorage _storage = new LocalStorage('notifications');
-  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
-  final List<Message> messages = [];
-
-  @override
-  void initState() {
-    super.initState();
-    _firebaseMessaging.configure(
-      onMessage: (Map<String, dynamic> message) async {
-        print("onMessage: $message");
-        final notification = message['notification'];
-        setState(() {
-          _storage.setItem('notifications', Message(
-              title: notification['title'], body: notification['body']));
-//          messages.add(Message(
-//              title: notification['title'], body: notification['body']));
-        });
-      },
-      onLaunch: (Map<String, dynamic> message) async {
-        print("onLaunch: $message");
-
-        final notification = message['data'];
-        setState(() {
-          _storage.setItem('notifications', Message(
-              title: notification['title'], body: notification['body']));
-//          messages.add(Message(
-//            title: '${notification['title']}',
-//            body: '${notification['body']}',
-//          ));
-        });
-      },
-      onResume: (Map<String, dynamic> message) async {
-        print("onResume: $message");
-      },
-    );
-    _firebaseMessaging.requestNotificationPermissions(
-        const IosNotificationSettings(sound: true, badge: true, alert: true));
-  }
+  final List<MessageNotification> messages;
+  _MessagingListState(this.messages);
 
   @override
   Widget build(BuildContext context) {
@@ -86,7 +51,6 @@ class _MessagingListState extends State<MessagingList> {
             ),
     );
   }
-
 
   Widget buildMessage(Message message) => Column(
         children: <Widget>[

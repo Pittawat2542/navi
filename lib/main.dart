@@ -1,11 +1,14 @@
 import 'package:flutter/material.dart';
-
+import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:Navi/models/Message.dart';
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:Navi/screens/AppSearchDelegate.dart';
 import 'package:Navi/screens/ActivityListScreen.dart';
 import 'package:Navi/screens/FavoriteScreen.dart';
 import 'package:Navi/screens/SettingsScreen.dart';
 import 'package:Navi/widgets/HomeBottomNavigationBar.dart';
 import 'package:Navi/widgets/MessagingList.dart';
+
 
 void main() => runApp(MyApp());
 
@@ -40,6 +43,74 @@ class MyHomePage extends StatefulWidget {
 
 class _MyHomePageState extends State<MyHomePage> {
   static final tabBar = ['news', 'activity', 'competition'];
+  FlutterLocalNotificationsPlugin flutterLocalNotificationsPlugin;
+  final FirebaseMessaging _firebaseMessaging = FirebaseMessaging();
+  final List<MessageNotification> messages = [];
+
+
+  @override
+  void initState() {
+    super.initState();
+    flutterLocalNotificationsPlugin = new FlutterLocalNotificationsPlugin();
+    var android = new AndroidInitializationSettings('@mipmap/ic_launcher');
+    var iOS = new IOSInitializationSettings();
+    var initSetttings = new InitializationSettings(android, iOS);
+    flutterLocalNotificationsPlugin.initialize(initSetttings,
+        onSelectNotification: onSelectNotification);
+
+    _firebaseMessaging.configure(
+      onMessage: (Map<String, dynamic> message) async {
+        print("onMessage: $message");
+        final notification = message['notification'];
+        setState(() {
+          showNotification(notification['title'], notification['body']);
+          messages.add(MessageNotification(
+              title: notification['title'], body: notification['body']));
+        });
+      },
+      onLaunch: (Map<String, dynamic> message) async {
+        print("onLaunch: $message");
+        final notification = message['data'];
+        setState(() {
+          showNotification(notification['title'], notification['body']);
+          messages.add(MessageNotification(
+            title: '${notification['title']}',
+            body: '${notification['body']}',
+          ));
+        });
+      },
+      onResume: (Map<String, dynamic> message) async {
+        print("onResume: $message");
+      },
+    );
+    _firebaseMessaging.requestNotificationPermissions(
+        const IosNotificationSettings(sound: true, badge: true, alert: true));
+  }
+
+
+  showNotification(title, body) async {
+    var android = new AndroidNotificationDetails(
+        'channel id', 'channel NAME', 'CHANNEL DESCRIPTION',
+        priority: Priority.High,importance: Importance.Max
+    );
+    var iOS = new IOSNotificationDetails();
+    var platform = new NotificationDetails(android, iOS);
+    await flutterLocalNotificationsPlugin.show(
+        0, 'Navi', title.toString(), platform,
+        payload: body.toString());
+  }
+
+
+  Future onSelectNotification(String payload) {
+    debugPrint("payload : $payload");
+    showDialog(
+      context: context,
+      builder: (_) => new AlertDialog(
+        title: new Text('Notification'),
+        content: new Text('$payload'),
+      ),
+    );
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -53,7 +124,7 @@ class _MyHomePageState extends State<MyHomePage> {
               icon: Icon(Icons.notifications_active),
               onPressed: () {
                 Navigator.of(context).push(
-                    MaterialPageRoute(builder: (context) => MessagingList()));
+                    MaterialPageRoute(builder: (context) => MessagingList(messages)));
               },
             ),
           ],
