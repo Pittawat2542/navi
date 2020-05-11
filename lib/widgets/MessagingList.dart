@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:Navi/models/Message.dart';
+import 'package:localstorage/localstorage.dart';
 
 class MessagingList extends StatefulWidget {
   final List<MessageNotification> messages;
@@ -18,7 +19,7 @@ class _MessagingListState extends State<MessagingList> {
       appBar: AppBar(
         title: Text("Notifications"),
       ),
-      body: (messages.length == 0 || messages == null)
+      body: _storage.getItem('notifications') == null
           ? Center(
               child: Column(
                 mainAxisAlignment: MainAxisAlignment.center,
@@ -46,12 +47,12 @@ class _MessagingListState extends State<MessagingList> {
               ),
             )
           : ListView(
-              children: messages.map(buildMessage).toList(),
+              children: _storage.getItem('notifications').map(buildMessage).toList(),
             ),
     );
   }
 
-  Widget buildMessage(MessageNotification message) => Column(
+  Widget buildMessage(Message message) => Column(
         children: <Widget>[
           ListTile(
             title: Text(message.title),
