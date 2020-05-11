@@ -66,72 +66,69 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
                                 child: CircularProgressIndicator(),
                               );
                             default:
-                              return snapshot.data.documents.length == 0 &&
-                                      snapshot1.data.documents.length == 0 &&
-                                      snapshot2.data.documents.length == 0
-                                  ? Center(
-                                      child: Column(
-                                        mainAxisAlignment:
-                                            MainAxisAlignment.center,
-                                        children: <Widget>[
-                                          const Icon(
-                                            Icons.cancel,
-                                            size: 64.0,
-                                          ),
-                                          const SizedBox(
-                                            height: 16.0,
-                                          ),
-                                          const Text(
-                                            'No results',
-                                            style: TextStyle(
-                                              fontSize: 24.0,
-                                              fontWeight: FontWeight.bold,
-                                            ),
-                                          ),
-                                          const SizedBox(
-                                            height: 8.0,
-                                          ),
-                                          const Text(
-                                              'You may need to try another search term.')
-                                        ],
+                              var temp = [
+                                ...snapshot.data.documents
+                                    .where((DocumentSnapshot doc) {
+                                  return doc['title']
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(
+                                      widget.query.toLowerCase());
+                                }).map((DocumentSnapshot document) {
+                                  return _buildActivityCard(
+                                      document, 'news');
+                                }).toList(),
+                                ...snapshot1.data.documents
+                                    .where((DocumentSnapshot doc) {
+                                  return doc['title']
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(
+                                      widget.query.toLowerCase());
+                                }).map((DocumentSnapshot document) {
+                                  return _buildActivityCard(
+                                      document, 'activity');
+                                }).toList(),
+                                ...snapshot2.data.documents
+                                    .where((DocumentSnapshot doc) {
+                                  return doc['title']
+                                      .toString()
+                                      .toLowerCase()
+                                      .contains(
+                                      widget.query.toLowerCase());
+                                }).map((DocumentSnapshot document) {
+                                  return _buildActivityCard(
+                                      document, 'competition');
+                                }).toList()
+                              ];
+                              return temp.length == 0 ? Center(
+                                child: Column(
+                                  mainAxisAlignment:
+                                  MainAxisAlignment.center,
+                                  children: <Widget>[
+                                    const Icon(
+                                      Icons.cancel,
+                                      size: 64.0,
+                                    ),
+                                    const SizedBox(
+                                      height: 16.0,
+                                    ),
+                                    const Text(
+                                      'No results',
+                                      style: TextStyle(
+                                        fontSize: 24.0,
+                                        fontWeight: FontWeight.bold,
                                       ),
-                                    )
-                                  : ListView(
-                                      children: [
-                                        ...snapshot.data.documents
-                                            .where((DocumentSnapshot doc) {
-                                          return doc['title']
-                                              .toString()
-                                              .toLowerCase()
-                                              .contains(
-                                                  widget.query.toLowerCase());
-                                        }).map((DocumentSnapshot document) {
-                                          return _buildActivityCard(
-                                              document, 'news');
-                                        }).toList(),
-                                        ...snapshot1.data.documents
-                                            .where((DocumentSnapshot doc) {
-                                          return doc['title']
-                                              .toString()
-                                              .toLowerCase()
-                                              .contains(
-                                                  widget.query.toLowerCase());
-                                        }).map((DocumentSnapshot document) {
-                                          return _buildActivityCard(
-                                              document, 'activity');
-                                        }).toList(),
-                                        ...snapshot2.data.documents
-                                            .where((DocumentSnapshot doc) {
-                                          return doc['title']
-                                              .toString()
-                                              .toLowerCase()
-                                              .contains(
-                                                  widget.query.toLowerCase());
-                                        }).map((DocumentSnapshot document) {
-                                          return _buildActivityCard(
-                                              document, 'competition');
-                                        }).toList()
-                                      ],
+                                    ),
+                                    const SizedBox(
+                                      height: 8.0,
+                                    ),
+                                    const Text(
+                                        'You may need to try another search term.')
+                                  ],
+                                ),
+                              ) : ListView(
+                                      children: temp,
                                     );
                           }
                         },
@@ -176,6 +173,7 @@ class _ActivityListScreenState extends State<ActivityListScreen> {
       title: document["title"],
       imageUrl: document["imageUrl"],
       category: category,
+      websiteUrl: document["websiteUrl"],
     );
   }
 }

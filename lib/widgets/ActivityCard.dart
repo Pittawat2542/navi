@@ -9,11 +9,13 @@ class ActivityCard extends StatelessWidget {
   final bool isActivityDetail;
   final bool isFavoriteCard;
   final String category;
+  final String websiteUrl;
 
   ActivityCard(
       {@required this.id,
       @required this.title,
       @required this.imageUrl,
+      @required this.websiteUrl,
       this.isActivityDetail = false,
       this.isFavoriteCard = false,
       this.height,
@@ -35,8 +37,8 @@ class ActivityCard extends StatelessWidget {
               ? Navigator.push(
                   context,
                   MaterialPageRoute(
-                      builder: (context) =>
-                          ActivityDetailScreen(id, title, category.toString())))
+                      builder: (context) => ActivityDetailScreen(
+                          id, title, category.toString(), websiteUrl)))
               : () {};
         },
         child: ClipRRect(
