@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 
 @immutable
-class Message {
+class MessageNotification {
   final String title;
   final String body;
 
-  const Message({
+  const MessageNotification({
     @required this.title,
     @required this.body,
   });
