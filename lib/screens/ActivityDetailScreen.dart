@@ -13,8 +13,10 @@ class ActivityDetailScreen extends StatefulWidget {
   final String activityId;
   final String category;
   final String title;
+  final String websiteurl;
 
-  ActivityDetailScreen(this.activityId, this.title, this.category);
+  ActivityDetailScreen(
+      this.activityId, this.title, this.category, this.websiteurl);
 
   @override
   _ActivityDetailScreenState createState() => _ActivityDetailScreenState();
@@ -35,7 +37,8 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
 
     if (widget.activityId != null) {
       return Scaffold(
-        appBar: _buildAppBar(context, widget.title, widget.activityId),
+        appBar: _buildAppBar(
+            context, widget.title, widget.activityId, widget.websiteurl),
         body: SingleChildScrollView(
           child: Stack(
             children: <Widget>[
@@ -79,6 +82,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
                           height: MediaQuery.of(context).size.height / 4,
                           isActivityDetail: true,
                           category: widget.category,
+                          websiteUrl: document["websiteUrl"],
                         ),
                         SizedBox(
                           height: 24,
@@ -164,7 +168,8 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
     return months[monthNumber - 1];
   }
 
-  AppBar _buildAppBar(BuildContext context, String title, String activityId) {
+  AppBar _buildAppBar(BuildContext context, String title, String activityId,
+      String websiteUrl) {
     return AppBar(
       actions: <Widget>[
         IconButton(
@@ -185,7 +190,7 @@ class _ActivityDetailScreenState extends State<ActivityDetailScreen> {
             color: Colors.white,
           ),
           onPressed: () {
-            Share.share(title);
+            Share.share('$title - $websiteUrl');
           },
         ),
       ],

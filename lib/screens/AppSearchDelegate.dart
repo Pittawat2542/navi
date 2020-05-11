@@ -72,7 +72,6 @@ class AppSearchDelegate extends SearchDelegate {
 
     return ActivityListScreen(
       query: query,
-      category: 'activity',
     );
   }
 

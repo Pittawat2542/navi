@@ -81,6 +81,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                             imageUrl: doc['imageUrl'],
                                             category: 'news',
                                             isFavoriteCard: true,
+                                            websiteUrl: doc["websiteUrl"],
                                           );
                                         },
                                       )
@@ -106,6 +107,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                             imageUrl: doc['imageUrl'],
                                             category: 'activity',
                                             isFavoriteCard: true,
+                                            websiteUrl: doc["websiteUrl"],
                                           );
                                         },
                                       )
@@ -131,6 +133,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                             imageUrl: doc['imageUrl'],
                                             category: 'competition',
                                             isFavoriteCard: true,
+                                            websiteUrl: doc["websiteUrl"],
                                           );
                                         },
                                       )
@@ -186,6 +189,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                               imageUrl: doc['imageUrl'],
                                               category: 'news',
                                               isFavoriteCard: true,
+                                              websiteUrl: doc["websiteUrl"],
                                             );
                                           },
                                         ).toList(),
@@ -207,6 +211,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                               imageUrl: doc['imageUrl'],
                                               category: 'activity',
                                               isFavoriteCard: true,
+                                              websiteUrl: doc["websiteUrl"],
                                             );
                                           },
                                         ).toList(),
@@ -228,6 +233,7 @@ class _FavoriteScreenState extends State<FavoriteScreen> {
                                               imageUrl: doc['imageUrl'],
                                               category: 'competition',
                                               isFavoriteCard: true,
+                                              websiteUrl: doc["websiteUrl"],
                                             );
                                           },
                                         ).toList()
